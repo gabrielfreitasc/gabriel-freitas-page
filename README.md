@@ -1,49 +1,39 @@
-# gabriel-freitas-page
+# Gabriel Freitas Page
 
-This project was created with [Better-T-Stack](https://github.com/AmanVarshney01/create-better-t-stack), a modern TypeScript stack that combines Next.js, and more.
+Projeto front-end criado com:
 
-## Features
+- **React** 18.3
+- **Next.js** 14.2
+- **TypeScript**
+- **Tailwind CSS**
+- **Framer Motion** - Animações
+- **GSAP** - Animações avançadas
+- **Moment.js** - Manipulação de datas
+- **React Toastify** - Notificações
+- **Prettier** - Formatação de código
+- **ESLint** - Linting
 
-- **TypeScript** - For type safety and improved developer experience
-- **Next.js** - Full-stack React framework
-- **TailwindCSS** - Utility-first CSS for rapid UI development
-- **shadcn/ui** - Reusable UI components
-- **Turborepo** - Optimized monorepo build system
+## Começar
 
-## Getting Started
-
-First, install the dependencies:
-
-```bash
-bun install
-```
-
-
-Then, run the development server:
+Instalar dependências:
 
 ```bash
-bun dev
+yarn install
 ```
 
-Open [http://localhost:3001](http://localhost:3001) in your browser to see the web application.
+Rodar em desenvolvimento:
 
-
-
-
-
-
-
-## Project Structure
-
-```
-gabriel-freitas-page/
-├── apps/
-│   ├── web/         # Frontend application (Next.js)
+```bash
+yarn dev
 ```
 
-## Available Scripts
+Abrir [http://localhost:3000](http://localhost:3000) no navegador.
 
-- `bun dev`: Start all applications in development mode
-- `bun build`: Build all applications
-- `bun dev:web`: Start only the web application
-- `bun check-types`: Check TypeScript types across all apps
+## Scripts
+
+- `yarn dev` - Inicia o servidor de desenvolvimento
+- `yarn build` - Cria o build de produção
+- `yarn start` - Inicia o servidor de produção
+- `yarn lint` - Executa o linter
+- `yarn format` - Formata o código com Prettier
+
