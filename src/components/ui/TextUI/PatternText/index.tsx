@@ -25,3 +25,5 @@ export const PatternText: React.FC<PatternTextProps> = ({
     </span>
   )
 }
+
+

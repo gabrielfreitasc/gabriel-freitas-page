@@ -1,5 +1,21 @@
 import type { Config } from 'tailwindcss'
 
+import plugin from 'tailwindcss/plugin'
+
+const rotate = plugin(function ({ addUtilities }) {
+  addUtilities({
+    '.rotate-y-180': {
+      transform: 'rotateY(180deg)',
+    },
+    '.rotate-x-180': {
+      transform: 'rotateX(180deg)',
+    },
+    '.rotate-180': {
+      transform: 'rotate(180deg)',
+    },
+  })
+})
+
 const config: Config = {
   content: [
     './src/pages/**/*.{js,ts,jsx,tsx,mdx}',
@@ -25,7 +41,7 @@ const config: Config = {
       },
     },
   },
-  plugins: [],
+  plugins: [rotate, require('daisyui')],
 }
 
 export default config
