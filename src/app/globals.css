@@ -101,9 +101,23 @@ body {
 }
 
 .background-animated {
-  background: linear-gradient(-45deg, #6b21a8, #3b0764);
+  background: linear-gradient(-45deg, #c7c7c7, #b5b2b3, #cfcfcf);
   background-size: 200% 200%;
   animation: gradientAnimation 5s ease infinite;
+}
+
+.background-animated-dark {
+  background: linear-gradient(-45deg, #a9a6a7, #737071, #5b5859);
+  background-size: 200% 200%;
+  animation: gradientAnimation 5s ease infinite;
+}
+
+.liquid-background {
+  @apply bg-zinc-900/50 border border-zinc-800;
+}
+
+.liquid-background-blur {
+  @apply bg-zinc-900/50 border border-zinc-800 backdrop-blur-sm;
 }
 
 @keyframes gradientAnimation {
@@ -116,4 +130,17 @@ body {
   100% {
     background-position: 0% 0%;
   }
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(-50%) translateX(0);
+  }
+  50% {
+    transform: translateY(-50%) translateX(-8px);
+  }
+}
+
+.animate-float {
+  animation: float 3s ease-in-out infinite;
 }

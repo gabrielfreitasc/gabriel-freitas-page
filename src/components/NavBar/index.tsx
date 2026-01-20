@@ -1,78 +1,68 @@
-import { useGSAP } from '@gsap/react'
 import gsap from 'gsap'
 import Link from 'next/link'
-import { IconBaseProps, IconType } from 'react-icons'
-import { FaNodeJs } from 'react-icons/fa'
+import { useEffect, useRef, useState } from 'react'
+import { IconType } from 'react-icons'
 import { GoHome } from 'react-icons/go'
-import { IoPerson } from 'react-icons/io5'
-import { PiCertificateFill, PiProjectorScreenChartFill } from 'react-icons/pi'
-import React, { useState, useRef, useEffect } from 'react'
+import { HiDocumentText } from 'react-icons/hi'
+import { IoMail, IoPerson } from 'react-icons/io5'
+import { MdWork } from 'react-icons/md'
 
 export function NavBar() {
   const [linkHovered, setLinkHovered] = useState<string | null>(null)
+  const [activeLink, setActiveLink] = useState<string>('Página Inicial')
   const spanRef = useRef<HTMLSpanElement>(null)
 
   useEffect(() => {
     if (spanRef.current) {
       if (linkHovered) {
-        // Animação de entrada - vem do fundo
         gsap.fromTo(
           spanRef.current,
           {
             opacity: 0,
-            scale: 0.8,
-            z: -100,
-            rotationX: -90,
+            x: 10,
           },
           {
             opacity: 1,
-            scale: 1,
-            z: 0,
-            rotationX: 0,
-            duration: 1.2,
-            ease: 'back.out(1.7)',
+            x: 0,
+            duration: 0.3,
+            ease: 'power2.out',
           }
         )
-      } else {
-        // Animação de saída - vai para o fundo
-        gsap.to(spanRef.current, {
-          opacity: 0,
-          scale: 0.8,
-          z: -50,
-          rotationX: 90,
-          duration: 0.8,
-          ease: 'power2.in',
-        })
       }
     }
   }, [linkHovered])
 
   return (
-    <nav className="flex flex-col items-center justify-center gap-4 fixed top-3 left-0 right-0 z-[999]">
-      <ul className="hover:scale-105 ease-in-out duration-500 flex items-center justify-center gap-3 p-2 rounded-lg border border-white/70">
-        {navLinks.map(link => (
-          <div key={link.name} className="relative">
+    <nav className="fixed right-6 top-1/2 z-[999] animate-float">
+      <ul className="flex flex-col items-center gap-6 p-4 rounded-full bg-zinc-900/60 backdrop-blur-md border border-zinc-800 shadow-2xl transition-all duration-300 hover:scale-105">
+        {navLinks.map((link, index) => (
+          <li key={link.name} className="relative">
             <Link
               href={link.url}
-              className="hover:scale-110 hover:bg-white/10 rounded-md border border-white/70 p-3 flex items-center justify-center text-white/70 group cursor-pointer ease-in-out duration-300"
+              onClick={() => setActiveLink(link.name)}
+              className={`
+                w-8 h-8 rounded-full flex items-center justify-center
+                transition-all duration-300 ease-out
+                ${
+                  activeLink === link.name
+                    ? 'bg-white/80 text-zinc-800 scale-110'
+                    : 'bg-transparent text-white/60 p-0.5 hover:text-white hover:bg-white/10'
+                }
+              `}
               onMouseEnter={() => setLinkHovered(link.name)}
               onMouseLeave={() => setLinkHovered(null)}
             >
-              <link.icon className="rotate-icon" />
+              <link.icon className="text-xl" />
             </Link>
             {linkHovered === link.name && (
               <span
                 ref={spanRef}
-                className="absolute -bottom-12 left-1/2 transform -translate-x-1/2 w-fit rounded-md border border-white/70 p-1 px-2 text-[10px] text-white/90 bg-black/20 backdrop-blur-sm whitespace-nowrap"
-                style={{
-                  transformStyle: 'preserve-3d',
-                  perspective: '1000px',
-                }}
+                className="absolute right-16 top-1/2 -translate-y-1/2 w-fit rounded-full bg-zinc-900/60 border border-zinc-800 px-3 py-1.5 text-xs text-white whitespace-nowrap backdrop-blur-sm"
               >
                 {link.name}
               </span>
             )}
-          </div>
+          </li>
         ))}
       </ul>
     </nav>
@@ -82,7 +72,7 @@ export function NavBar() {
 const navLinks: { name: string; url: string; icon: IconType }[] = [
   { name: 'Página Inicial', url: '/', icon: GoHome },
   { name: 'Sobre Mim', url: '/about', icon: IoPerson },
-  { name: 'Cursos Relevantes', url: '/courses', icon: PiCertificateFill },
-  { name: 'Tecnologias', url: '/tecnologies', icon: FaNodeJs },
-  { name: 'Projetos', url: '/projects', icon: PiProjectorScreenChartFill },
+  { name: 'Projetos', url: '/projects', icon: MdWork },
+  { name: 'Cursos', url: '/courses', icon: HiDocumentText },
+  { name: 'Contato', url: '/contact', icon: IoMail },
 ]

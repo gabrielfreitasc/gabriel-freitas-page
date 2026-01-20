@@ -1,8 +1,8 @@
-import React, { useRef, useEffect, useState } from 'react'
+import { useGSAP } from '@gsap/react'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { SplitText as GSAPSplitText } from 'gsap/SplitText'
-import { useGSAP } from '@gsap/react'
+import React, { useEffect, useRef, useState } from 'react'
 
 gsap.registerPlugin(ScrollTrigger, GSAPSplitText, useGSAP)
 
@@ -379,7 +379,7 @@ const ShuffleText: React.FC<ShuffleProps> = ({
     'inline-block whitespace-normal break-words will-change-transform uppercase text-[4rem] leading-none'
   const commonStyle: React.CSSProperties = {
     textAlign,
-    fontFamily: `'Press Start 2P', sans-serif`,
+    fontFamily: `'Zenitha Classic', sans-serif`,
     ...style,
   }
 

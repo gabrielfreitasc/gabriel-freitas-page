@@ -1,11 +1,11 @@
+import { motion } from 'framer-motion'
 import gsap from 'gsap'
 import { DrawSVGPlugin } from 'gsap/all'
 import { useEffect, useRef } from 'react'
-import { motion } from 'framer-motion'
 
 gsap.registerPlugin(DrawSVGPlugin)
 
-export function Logo() {
+export function Logo({ containerStyle, width, height }: { containerStyle?: string, width?: number, height?: number }) {
   const logoRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -86,15 +86,15 @@ export function Logo() {
   return (
     <motion.div
       ref={logoRef}
-      className="absolute top-3 left-3 cursor-pointer"
+      className={`absolute top-3 left-3 cursor-pointer ${containerStyle}`}
       whileHover={{
         scale: 1.05,
         transition: { duration: 0.3 },
       }}
     >
       <svg
-        width="120"
-        height="96"
+        width={width || 120}
+        height={height || 96}
         viewBox="0 0 589 472"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"

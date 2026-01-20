@@ -1,13 +1,13 @@
-import { motion } from 'framer-motion'
-import LiquidEther from '../ui/LiquidEtherBackground'
-import ShuffleText from '../ui/TextUI/ShuffleText'
 import {
   FilePdfIcon,
   GithubLogoIcon,
   LinkedinLogoIcon,
 } from '@phosphor-icons/react'
-import RotatingText from '../ui/TextUI/RotatingText'
+import { motion } from 'framer-motion'
 import { RefObject } from 'react'
+import LiquidEther from '../ui/LiquidEtherBackground'
+import RotatingText from '../ui/TextUI/RotatingText'
+import ShuffleText from '../ui/TextUI/ShuffleText'
 
 interface HeroSectionProps {
   containerRef: RefObject<HTMLDivElement | null>
@@ -26,7 +26,7 @@ export function HeroSection({ containerRef }: HeroSectionProps) {
     <section className="w-[100vw] h-[100vh] flex flex-col items-center justify-center gap-2 relative">
       <div className="absolute inset-0 z-0 w-full h-full" data-speed="0.5">
         <LiquidEther
-          colors={['#5227FF', '#FF9FFC', '#B19EEF']}
+          colors={['#C7C7C7', '#B5B2B3', '#CFCFCF']}
           mouseForce={20}
           cursorSize={100}
           isViscous={false}
@@ -73,7 +73,7 @@ export function HeroSection({ containerRef }: HeroSectionProps) {
           <p className="text-xl text-white font-bold">Desenvolvedor</p>
           <RotatingText
             texts={['Front-end', 'Back-end', 'Full Stack']}
-            mainClassName="px-2 sm:px-2 md:px-3 background-animated text-white font-extrabold overflow-hidden py-0.5 sm:py-1 md:py-2 justify-center rounded-lg"
+            mainClassName="px-2 sm:px-2 md:px-3 liquid-background-blur text-white font-extrabold overflow-hidden py-0.5 sm:py-1 md:py-2 justify-center rounded-lg"
             staggerFrom={'last'}
             initial={{ y: '100%' }}
             animate={{ y: 0 }}
@@ -95,9 +95,8 @@ export function HeroSection({ containerRef }: HeroSectionProps) {
                   : window.open(link.url, '_blank')
               }
               title={link.name}
-              data-tip={link.name}
               whileTap={{ scale: 0.8 }}
-              className="tooltip hover:scale-110 ease-in-out duration-300 text-white hover:text-white/60 transition-colors p-2 rounded-md bg-metallic-purple bg-metallic-noise group"
+              className="tooltip hover:scale-110 ease-in-out duration-300 text-white hover:text-white/60 p-2 rounded-md liquid-background-blur group"
             >
               {link.icon}
             </motion.button>
