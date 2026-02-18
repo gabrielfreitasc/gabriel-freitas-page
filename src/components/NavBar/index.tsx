@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from 'react'
 import { IconType } from 'react-icons'
 import { GoHome } from 'react-icons/go'
 import { HiDocumentText } from 'react-icons/hi'
-import { IoMail, IoPerson } from 'react-icons/io5'
+import { IoLogoNodejs, IoMail } from 'react-icons/io5'
 import { MdWork } from 'react-icons/md'
 
 export function NavBar() {
@@ -36,13 +36,13 @@ export function NavBar() {
     <nav className="fixed right-6 top-1/2 z-[999] animate-float">
       <ul className="flex flex-col items-center gap-6 p-4 rounded-full bg-zinc-900/60 backdrop-blur-md border border-zinc-800 shadow-2xl transition-all duration-300 hover:scale-105">
         {navLinks.map((link, index) => (
-          <li key={link.name} className="relative">
+          <li key={link.name} className="relative group">
             <Link
               href={link.url}
               onClick={() => setActiveLink(link.name)}
               className={`
                 w-8 h-8 rounded-full flex items-center justify-center
-                transition-all duration-300 ease-out
+                transition-all duration-300 ease-out 
                 ${
                   activeLink === link.name
                     ? 'bg-white/80 text-zinc-800 scale-110'
@@ -52,7 +52,7 @@ export function NavBar() {
               onMouseEnter={() => setLinkHovered(link.name)}
               onMouseLeave={() => setLinkHovered(null)}
             >
-              <link.icon className="text-xl" />
+              <link.icon className="text-xl rotate-icon" />
             </Link>
             {linkHovered === link.name && (
               <span
@@ -71,8 +71,8 @@ export function NavBar() {
 
 const navLinks: { name: string; url: string; icon: IconType }[] = [
   { name: 'Página Inicial', url: '/', icon: GoHome },
-  { name: 'Sobre Mim', url: '/about', icon: IoPerson },
-  { name: 'Projetos', url: '/projects', icon: MdWork },
+  { name: 'Stacks', url: '/stacks', icon: IoLogoNodejs },
+  { name: 'Experiências', url: '/experiences', icon: MdWork },
   { name: 'Cursos', url: '/courses', icon: HiDocumentText },
   { name: 'Contato', url: '/contact', icon: IoMail },
 ]

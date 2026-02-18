@@ -5,7 +5,15 @@ import { useEffect, useRef } from 'react'
 
 gsap.registerPlugin(DrawSVGPlugin)
 
-export function Logo({ containerStyle, width, height }: { containerStyle?: string, width?: number, height?: number }) {
+export function Logo({
+  containerStyle,
+  width,
+  height,
+}: {
+  containerStyle?: string
+  width?: number
+  height?: number
+}) {
   const logoRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {

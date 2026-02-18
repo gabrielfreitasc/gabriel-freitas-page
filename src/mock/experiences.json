@@ -1,0 +1,38 @@
+[
+  {
+    "type": "consultancy",
+    "title": "Diagnóstico & Controle de Fazendas Leiteiras",
+    "description": "Solução para gestão técnica de fazendas leiteiras, com análise operacional avançada, acompanhamento de indicadores produtivos e organização de equipes de campo.",
+    "achievements": [
+      {
+        "title": "Gestão Integrada",
+        "description": "Centralização completa de registros técnicos e rastreabilidade total das ações."
+      },
+      {
+        "title": "Planejamento Estratégico",
+        "description": "Acompanhamento de agendas e auditoria da evolução produtiva."
+      },
+      {
+        "title": "Análise Financeira",
+        "description": "Controle de custos e relatórios analíticos para decisões estratégicas."
+      },
+      {
+        "title": "Integração de Dados",
+        "description": "Unificação de dados produtivos, financeiros e operacionais."
+      },
+      {
+        "title": "Análise de Crédito",
+        "description": "Análise de crédito dos clientes a partir do fornecimento dos dados de desempenho da produção de cada cliente."
+      }
+    ],
+    "techStack": [
+      { "name": "React", "icon": "SiReact" },
+      { "name": "Tailwind CSS", "icon": "SiTailwindcss" },
+      { "name": "Next.js", "icon": "SiNextdotjs" },
+      { "name": "Java", "icon": "FaJava" },
+      { "name": "TypeScript", "icon": "SiTypescript" },
+      { "name": "JavaScript", "icon": "SiJavascript" },
+      { "name": "OpenAI", "icon": "SiOpenai" }
+    ]
+  }
+]

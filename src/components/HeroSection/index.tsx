@@ -8,6 +8,13 @@ import { RefObject } from 'react'
 import LiquidEther from '../ui/LiquidEtherBackground'
 import RotatingText from '../ui/TextUI/RotatingText'
 import ShuffleText from '../ui/TextUI/ShuffleText'
+import { Dock, DockIcon } from '../ui/dock'
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '../ui/tooltip'
 
 interface HeroSectionProps {
   containerRef: RefObject<HTMLDivElement | null>
@@ -85,22 +92,32 @@ export function HeroSection({ containerRef }: HeroSectionProps) {
           />
         </div>
 
-        <div className="flex items-center gap-3 w-full justify-center">
-          {socialMediaLinks.map(link => (
-            <motion.button
-              key={link.name}
-              onClick={() =>
-                link.name === 'Curriculo'
-                  ? handleDownloadPDF()
-                  : window.open(link.url, '_blank')
-              }
-              title={link.name}
-              whileTap={{ scale: 0.8 }}
-              className="tooltip hover:scale-110 ease-in-out duration-300 text-white hover:text-white/60 p-2 rounded-md liquid-background-blur group"
-            >
-              {link.icon}
-            </motion.button>
-          ))}
+        <div className="relative">
+          <TooltipProvider>
+            <Dock direction="middle">
+              {socialMediaLinks.map(link => (
+                <DockIcon
+                  onClick={() =>
+                    link.name === 'Curriculo'
+                      ? handleDownloadPDF()
+                      : window.open(link.url, '_blank')
+                  }
+                  key={link.name}
+                >
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <span className="size-10 p-3 flex items-center justify-center rounded-lg hover:bg-white/10 ease-in-out duration-300">
+                        {link.icon}
+                      </span>
+                    </TooltipTrigger>
+                    <TooltipContent className="!bg-white !text-black">
+                      {link.name}
+                    </TooltipContent>
+                  </Tooltip>
+                </DockIcon>
+              ))}
+            </Dock>
+          </TooltipProvider>
         </div>
 
         {/* // Cursos relevantes */}

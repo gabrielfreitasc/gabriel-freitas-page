@@ -1,6 +1,7 @@
 'use client'
 
 import { CoursesSection } from '@/components/CoursesSection'
+import { ExperiencesSection } from '@/components/ExperiencesSection'
 import { Logo } from '@/components/GlobalComponents/Logo'
 import { HeroSection } from '@/components/HeroSection'
 import { NavBar } from '@/components/NavBar'
@@ -43,6 +44,7 @@ export default function Home() {
           <Logo width={50} height={50} />
           <HeroSection containerRef={containerRef} />
           <StacksSection />
+          <ExperiencesSection />
           <CoursesSection />
 
           <GradualBlurMemo

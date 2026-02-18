@@ -1,105 +1,134 @@
-import { RadialIntro } from "../animate-ui/components/community/radial-intro"
-import ScrollFloat from "../ui/ScrollFloat"
+import Image from 'next/image'
+import { forwardRef, useRef } from 'react'
+import stacks from '../../mock/stacks.json'
+import ScrollFloat from '../ui/ScrollFloat'
 
 export function StacksSection() {
-    return(
-        <section className="w-full min-h-screen flex flex-col items-center justify-start bg-neutral-950 py-20 px-8">
-            <div className="w-full max-w-6xl mb-16">
-                <ScrollFloat
-                    animationDuration={1}
-                    ease="back.inOut(2)"
-                    scrollStart="top bottom"
-                    scrollEnd="center top"
-                    stagger={0.03}
-                >
-                    Tecnologias
-                </ScrollFloat>
-                <ScrollFloat
-                    animationDuration={1}
-                    ease="back.inOut(2)"
-                    scrollStart="top bottom"
-                    scrollEnd="center"
-                    stagger={0.03}
-                    textClassName="!text-sm"
-                    containerClassName="!mt-0"
-                >
-                                            Tecnologias que eu tenho experiência
+  const containerRef = useRef<HTMLDivElement>(null)
+  const divCenterRef = useRef<HTMLDivElement>(null)
+  const itemRefs = useRef<Array<React.RefObject<HTMLDivElement | null>>>([])
 
-                </ScrollFloat>
-                <div className="w-full flex items-center justify-center">
-
-                <RadialIntro orbitItems={ITEMS} stageSize={500} imageSize={80} />
-
-                </div>
-            </div>
-        </section>
+  if (itemRefs.current.length !== stacks.length) {
+    itemRefs.current = stacks.map(
+      () => ({ current: null }) as React.RefObject<HTMLDivElement | null>
     )
+  }
+
+  return (
+    <section className="w-full min-h-screen flex flex-col items-center justify-start bg-neutral-950 py-20 px-8">
+      <div className="w-full mb-16">
+        <ScrollFloat
+          animationDuration={1}
+          ease="back.inOut(2)"
+          scrollStart="top bottom"
+          scrollEnd="center top"
+          stagger={0.03}
+          textClassName="!text-7xl uppercase font-bold text-white"
+        >
+          Stacks
+        </ScrollFloat>
+        <ScrollFloat
+          animationDuration={1}
+          ease="back.inOut(2)"
+          scrollStart="top bottom"
+          scrollEnd="center"
+          stagger={0.03}
+          textClassName="!text-sm"
+          containerClassName="!mt-0"
+        >
+          Tecnologias e ferramentas que possuo experiência.
+        </ScrollFloat>
+
+        <div ref={containerRef} className="w-full gap-2 grid grid-cols-6">
+          {stacks.map(item => (
+            <svg
+              width="167"
+              height="169"
+              viewBox="0 0 167 169"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+              key={item.id}
+              className="relative mt-2"
+            >
+              <path
+                d="M1 166.041V3.69355V3.20381L1.24481 2.46921L1.73442 1.97947L2.22404 1.48974L2.71365 1.24487L3.20326 1H157.187H164.042L164.776 1.48974L165.51 2.22434L166 2.95894V3.69355V149.88V150.859L165.51 151.594L164.776 152.084L163.552 152.573H107.491H106.022L104.553 153.063L103.085 153.798L101.616 154.777L100.392 156.001L95.7404 161.878L93.5371 164.572L91.5786 166.531L90.3546 167.265L88.8858 167.755L87.6617 168H10.3027H2.95846L2.22404 167.51L1.48961 166.776L1 166.041Z"
+                stroke="#E3E2E2"
+                stroke-width="2"
+              />
+              <Circle key={item.id} name={item.name} src={item.src} />
+            </svg>
+          ))}
+
+          {/* Coluna esquerda */}
+          {/* <div className="w-96 items-start justify-start flex flex-col gap-6">
+            {stacks.slice(0, 6).map((item, index) => (
+              <Circle
+                key={item.id}
+                name={item.name}
+                ref={itemRefs.current[index]}
+                src={item.src}
+              />
+            ))}
+          </div>
+
+          <Circle
+            ref={divCenterRef}
+            className="!size-20"
+            name="Gabriel Freitas"
+            src="https://avatars.githubusercontent.com/u/69334324?v=4"
+          />
+
+          <div className="w-96 items-end justify-end flex flex-col gap-6">
+            {stacks.slice(6, 12).map((item, index) => (
+              <Circle
+                key={item.id}
+                ref={itemRefs.current[index + 6]}
+                src={item.src}
+                name={item.name}
+              />
+            ))}
+          </div> */}
+
+          {/* {stacks.map((_, index) => {
+            const isLeft = index < 6
+            const curvature = isLeft ? 65 - (index + 1) * 10 : -75 + index * 10
+
+            return (
+              <AnimatedBeam
+                key={`beam-${index}`}
+                containerRef={containerRef}
+                fromRef={itemRefs.current[index]}
+                toRef={divCenterRef}
+                curvature={curvature}
+                startXOffset={isLeft ? -25 : 25}
+                reverse={!isLeft}
+              />
+            )
+          })} */}
+        </div>
+      </div>
+    </section>
+  )
 }
 
-const ITEMS = [
-    {
-        id: 1,
-        name: 'Node.js',
-        src: 'https://stickersdevs.com.br/wp-content/uploads/2020/06/node_n_sticker_adesivo.jpg'
-    },
-    {
-        id: 2,
-        name: 'React',
-        src: 'https://images.icon-icons.com/2108/PNG/512/react_icon_130845.png'
-    },
-    {
-        id: 3,
-        name: 'Next.js',
-        src: 'https://marcbruederlin.gallerycdn.vsassets.io/extensions/marcbruederlin/next-icons/0.1.0/1723747598319/Microsoft.VisualStudio.Services.Icons.Default'
-    },
-    {
-        id: 4,
-        name: 'Nest.js',
-        src: 'https://logowik.com/content/uploads/images/nestjs-node-js1721157586.logowik.com.webp'
-    },
-    {
-        id: 7,
-        name: 'MongoDB',
-        src: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSITHn_TgjDyhdWvePNw0mveDrTUr00GLfv_Q&s'
-    },
-    {
-        id: 8,
-        name: 'MySQL',
-        src: 'https://stickersdevs.com.br/wp-content/uploads/2015/07/mysql_sticker-adesivo-1.png'
-    },
-    {
-        id: 13,
-        name: 'Prisma',
-        src: 'https://asset.brandfetch.io/idBBE3_R9e/idzL_5tH6B.jpg'
-    },
-    {
-        id: 5,
-        name: 'Tailwind CSS',
-        src: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTSDKn3vA2YUbXzN0ZC3gALWJ08gJN-Drl15w&s'
-    },
-    {
-        id: 6,
-        name: 'TypeScript',
-        src: 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/4c/Typescript_logo_2020.svg/960px-Typescript_logo_2020.svg.png'
-    },
-    {
-        id: 9,
-        name: 'Docker',
-        src: 'https://cdn.iconscout.com/icon/free/png-256/free-docker-logo-icon-svg-download-png-2285024.png?f=webp'
-    },
-    {
-        id: 10,
-        name: 'N8N',
-        src: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ8b13FupbJiqRDcYQbK4BfEcAJ6S7eA8I5oQ&s'
-    },
-    {
-        id: 11,
-        name: 'AWS',
-        src: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRysX62yV0u_2qVQ1L8aX2YZPDCuto1Y1uhGw&s'
-    },
-    {
-        id: 12,
-        name: 'Evolution API',
-        src: 'https://yt3.googleusercontent.com/3t3k7tXxnr8tCFM1mIQ8UVAGoqesSb2YGkciUpZC4pRIbY_9vJi-XHadYQUrQUz6t1X5nemJXg=s900-c-k-c0x00ffffff-no-rj'
-    }
-]
+const Circle = forwardRef<
+  HTMLDivElement,
+  { className?: string; children?: React.ReactNode; src: string; name: string }
+>(({ className, children, src, name }, ref) => {
+  return (
+    <div
+      ref={ref}
+      data-tip={name}
+      className={` ${className} hover:scale-110 ease-in-out duration-300 tooltip tooltip-left z-10 flex size-12 items-center justify-center rounded-full border-2 bg-white p-1.5 shadow-[0_0_20px_-12px_rgba(0,0,0,0.8)]`}
+    >
+      <Image
+        src={src}
+        alt={name}
+        width={60}
+        height={60}
+        className="rounded-full w-full h-full"
+      />
+    </div>
+  )
+})
+Circle.displayName = 'Circle'

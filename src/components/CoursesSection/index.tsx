@@ -1,9 +1,10 @@
 import { useGSAP } from '@gsap/react'
-import ScrollFloat from '../ui/ScrollFloat'
-import { useRef } from 'react'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
-import { Card } from '../GlobalComponents/Card'
+import { useRef } from 'react'
+import courses from '../../mock/courses.json'
+import { TweetCard } from '../GlobalComponents/TweetCard'
+import ScrollFloat from '../ui/ScrollFloat'
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -58,34 +59,16 @@ export function CoursesSection() {
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 w-full max-w-6xl pb-20">
         {courses.map((course, index) => (
-          <Card
+          <TweetCard
             key={course.name + index}
             title={course.name}
-            titlePosition="top-right"
-            containerStyle="p-6 rounded-lg border border-purple-500/20 hover:border-purple-500/40 transition-all"
-          >
-            <h3 className="text-2xl font-bold text-white mb-2">
-              {course.name}
-            </h3>
-            <p className="text-gray-400">{course.description}</p>
-          </Card>
+            description={course.description}
+            image={course.image}
+            emissionDate={course.emissionDate}
+            containerStyle="bg-zinc-100"
+          />
         ))}
       </div>
     </section>
   )
 }
-
-const courses = [
-  {
-    name: 'React Bits',
-    description: 'React Bits',
-  },
-  {
-    name: 'React Bits',
-    description: 'React Bits',
-  },
-  {
-    name: 'React Bits',
-    description: 'React Bits',
-  },
-]

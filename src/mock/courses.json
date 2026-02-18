@@ -1,0 +1,38 @@
+[
+  {
+    "name": "Develop Generative AI Applications: Get Started - IBM",
+    "description": "Curso da IBM sobre GenAI e LangChain focado em transformar modelos de linguagem em componentes reais de software. Aprendi fundamentos de prompt engineering e in-context learning, uso de prompt templates, chains e agents no LangChain, integração de IA generativa em aplicações Flask e técnicas para gerar respostas estruturadas em JSON. Também abordou como avaliar e escolher diferentes LLMs conforme custo, desempenho e confiabilidade para cada caso de uso.",
+    "image": "https://s3.amazonaws.com/coursera_assets/meta_images/generated/CERTIFICATE_LANDING_PAGE/CERTIFICATE_LANDING_PAGE~5O3H8ARYY4OC/CERTIFICATE_LANDING_PAGE~5O3H8ARYY4OC.jpeg",
+    "emissionDate": "Janeiro 2026"
+  },
+  {
+    "name": "NestJS para REST API com TypeORM, Autenticação JWT e Testes - Udemy",
+    "description": "Formação prática em NestJS e TypeScript voltada para desenvolvimento de APIs RESTful escaláveis e bem estruturadas. Foram abordados autenticação e autorização com JWT e Guards, integração com MySQL e PostgreSQL usando TypeORM, validação de dados com DTOs e Pipes, além de testes automatizados com Jest. O curso também explorou o uso de interceptors, filters e middlewares customizados, junto à organização de projetos em módulos, controllers e services seguindo princípios SOLID.",
+    "image": "https://udemy-certificate.s3.amazonaws.com/image/UC-1119b3f8-e1fe-4581-bb2e-878fd4f88aa2.jpg?v=1760721560000",
+    "emissionDate": "Outubro 2025"
+  },
+  {
+    "name": "Curso de React.Js e Next.Js (Intermediário e Avançado)",
+    "description": "Curso completo de React, Next.js e NestJS voltado para construção de aplicações full-stack modernas. Incluiu desenvolvimento de SPAs com React 19 usando Context API, Reducers, Tailwind CSS e Web Workers, além de aplicações com Next.js 15 utilizando App Router, Server Components, Server Actions e estratégias avançadas de cache. Também abordou criação de APIs REST com NestJS, autenticação com JWT e cookies httpOnly, upload de arquivos, integração front-end/back-end e testes automatizados com Vitest e Playwright. O curso ainda passou por deploy em Vercel e servidores Linux com Nginx e pm2, além de conteúdos complementares de SQL, Linux, HTML, CSS e padrões de projeto.",
+    "image": "https://udemy-certificate.s3.amazonaws.com/image/UC-2335dc00-7b2e-4671-84f5-02b5af50bae6.jpg?v=1696813453000",
+    "emissionDate": "Outubro 2023"
+  },
+  {
+    "name": "NLW IA - Rocketseat",
+    "description": "Desenvolvimento do projeto Upload.AI, uma aplicação web voltada para manipulação de mídia com inteligência artificial. A aplicação realiza transcrição de áudio de vídeos e geração automática de títulos e descrições usando APIs de IA. Na trilha avançada, foram exploradas tecnologias como WebAssembly e FFMPEG para processamento de vídeo e áudio diretamente no navegador. Stack utilizada: Node.js com TypeScript no backend, React com Vite no frontend e integração com APIs da OpenAI para recursos de IA.",
+    "image": "https://i.postimg.cc/WhXkjTF5/Captura-de-Tela-2026-02-15-a-s-14-09-57.png",
+    "emissionDate": "Setembro 2023"
+  },
+  {
+    "name": "Curso de JavaScript e TypeScript do básico ao avançado - Udemy",
+    "description": "Formação full-stack em JavaScript e TypeScript cobrindo desde fundamentos da linguagem até construção de aplicações modernas. O curso abordou Node.js, Express, MongoDB, MySQL/MariaDB, criação de APIs REST, autenticação com session e JWT, além de React com Hooks, Redux e Redux-Saga. Também incluiu conceitos de orientação a objetos, princípios SOLID, testes automatizados com Jest, uso de ORMs como Sequelize e Mongoose, configuração de servidores Linux para deploy seguro (SSH e HTTPS) e introdução a NestJS, Strapi e PostgreSQL. Conteúdos extras envolveram HTML5, CSS3, Webpack, Babel, Expressões Regulares e Design Patterns.",
+    "image": "https://udemy-certificate.s3.amazonaws.com/image/UC-fa8c3215-370a-4989-b26e-e387bb30f628.jpg?v=1689724720000",
+    "emissionDate": "Julho 2023"
+  },
+  {
+    "name": "Descomplicando Docker 2021 - LinuxTips",
+    "description": "Curso completo de Docker 2021, que abordou desde conceitos básicos até deploy de aplicações em produção. O curso incluiu instalação e configuração do Docker Engine, criação de imagens e containers, uso de volumes e networks, além de deploy em servidores Linux com Nginx e pm2. Também abordou técnicas de monitoramento e otimização de performance com Docker Compose e Docker Swarm.",
+    "image": "https://i.postimg.cc/Thcyqf9D/certificate-descomplicando-o-docker-2021-gabriel-freitas-coelho.png",
+    "emissionDate": "Junho 2023"
+  }
+]
