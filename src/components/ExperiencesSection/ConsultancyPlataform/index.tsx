@@ -6,16 +6,7 @@ import {
   PencilSimpleIcon,
 } from '@phosphor-icons/react'
 import moment from 'moment'
-import { FaJava } from 'react-icons/fa'
 import { IoPerson } from 'react-icons/io5'
-import {
-  SiJavascript,
-  SiNextdotjs,
-  SiOpenai,
-  SiReact,
-  SiTailwindcss,
-  SiTypescript,
-} from 'react-icons/si'
 import {
   PolarAngleAxis,
   PolarGrid,
@@ -24,6 +15,8 @@ import {
   RadarChart,
   ResponsiveContainer,
 } from 'recharts'
+import projectData from '../../../mock/experiences.json'
+import { MacOSWindowTemplate } from '../MacOSWindowTemplate'
 import { ProjectDetailsCard } from '../ProjectDetailsCard'
 
 const radarData = [
@@ -37,62 +30,15 @@ const radarData = [
   { subject: 'Exames e Cirurgia', value: 5, fullMark: 5 },
 ]
 
-const projectData = {
-  title: 'Diagnóstico & Controle de Fazendas Leiteiras',
-  description:
-    'Solução para gestão técnica de fazendas leiteiras, com análise operacional avançada, acompanhamento de indicadores produtivos e organização de equipes de campo.',
-  achievements: [
-    {
-      title: 'Gestão Integrada',
-      description:
-        'Centralização completa de registros técnicos e rastreabilidade total das ações.',
-    },
-    {
-      title: 'Planejamento Estratégico',
-      description:
-        'Acompanhamento de agendas e auditoria da evolução produtiva.',
-    },
-    {
-      title: 'Análise Financeira',
-      description:
-        'Controle de custos e relatórios analíticos para decisões estratégicas.',
-    },
-    {
-      title: 'Integração de Dados',
-      description:
-        'Unificação de dados produtivos, financeiros e operacionais.',
-    },
-    {
-      title: 'Análise de Crédito',
-      description:
-        'Análise de crédito dos clientes a partir do fornecimento dos dados de desempenho da produção de cada cliente.',
-    },
-  ],
-  techStack: [
-    { name: 'React', icon: SiReact },
-    { name: 'Tailwind CSS', icon: SiTailwindcss },
-    { name: 'Next.js', icon: SiNextdotjs },
-    { name: 'Java', icon: FaJava },
-    { name: 'TypeScript', icon: SiTypescript },
-    { name: 'JavaScript', icon: SiJavascript },
-    { name: 'OpenAI', icon: SiOpenai },
-  ],
-}
-
 export function ConsultancyPlataform() {
+  const consultancyData = projectData.find(
+    project => project.type === 'consultancy'
+  )
+  if (!consultancyData) {
+    return null
+  }
   return (
-    <div className="w-full flex flex-col items-center h-full p-5 rounded-xl">
-      <span className="bg-zinc-100 p-3 w-full h-12 rounded-t-xl flex items-center gap-5">
-        <div className="flex items-center gap-1">
-          <span className="w-2 h-2 bg-red-500 rounded-full" />
-          <span className="w-2 h-2 bg-yellow-500 rounded-full" />
-          <span className="w-2 h-2 bg-green-500 rounded-full" />
-        </div>
-        <p className="text-sm text-zinc-800 font-semibold">
-          Plataforma de consultoria veterinária de leite e planejamento de
-          projetos
-        </p>
-      </span>
+    <MacOSWindowTemplate title="Plataforma de consultoria veterinária de leite e planejamento de projetos">
       <div className="w-full h-[40rem] flex items-center gap-2 bg-white rounded-b-xl">
         <div className="w-[40%] ml-5 h-[95%] flex flex-col items-start p-6 pt-2 bg-gradient-to-br from-zinc-50 to-zinc-100 rounded-xl border border-zinc-200">
           <div className="w-full flex items-center gap-2 p-6">
@@ -163,15 +109,15 @@ export function ConsultancyPlataform() {
 
             {/* Dias da semana */}
             {/* <div className="grid grid-cols-7 gap-1">
-              {['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sab'].map(day => (
-                <div
-                  key={day}
-                  className="text-center text-xs font-medium text-gray-700 py-1"
-                >
-                  {day}
-                </div>
-              ))}
-            </div> */}
+                {['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sab'].map(day => (
+                  <div
+                    key={day}
+                    className="text-center text-xs font-medium text-gray-700 py-1"
+                  >
+                    {day}
+                  </div>
+                ))}
+              </div> */}
 
             {/* Dias do mês */}
             <div className="grid grid-cols-12 gap-1">
@@ -190,12 +136,12 @@ export function ConsultancyPlataform() {
           </div>
         </div>
         <ProjectDetailsCard
-          title={projectData.title}
-          description={projectData.description}
-          achievements={projectData.achievements}
-          techStack={projectData.techStack}
+          title={consultancyData.title}
+          description={consultancyData.description}
+          achievements={consultancyData.achievements}
+          techStack={consultancyData.techStack}
         />
       </div>
-    </div>
+    </MacOSWindowTemplate>
   )
 }

@@ -34,5 +34,77 @@
       { "name": "JavaScript", "icon": "SiJavascript" },
       { "name": "OpenAI", "icon": "SiOpenai" }
     ]
+  },
+  {
+    "type": "geoMap",
+    "title": "Mapeamento de talhões de fazendas via satélite",
+    "description": "Solução para mapeamento de talhões de fazendas via satélite, como separação de talhões por tipo de cultura, tipo do solo e planejamento das próximas safras.",
+    "achievements": [
+      {
+        "title": "Mapeamento de talhões",
+        "description": "Mapeamento de talhões de fazendas via satélite, como separação de talhões por tipo de cultura, tipo do solo e planejamento das próximas safras."
+      },
+      {
+        "title": "Planejamento de safras",
+        "description": "Planejamento de safras de fazendas via satélite, como separação de talhões por tipo de cultura, tipo do solo e planejamento das próximas safras."
+      },
+      {
+        "title": "Mapeamento de doenças e pragas",
+        "description": "Agrupamento de doenças e pragas reportadas por técnicos especializados em campo."
+      }
+    ],
+    "techStack": [
+      { "name": "React", "icon": "SiReact" },
+      { "name": "Tailwind CSS", "icon": "SiTailwindcss" },
+      { "name": "Next.js", "icon": "SiNextdotjs" },
+      { "name": "TypeScript", "icon": "SiTypescript" },
+      { "name": "JavaScript", "icon": "SiJavascript" },
+      { "name": "OpenAI", "icon": "SiOpenai" },
+      { "name": "Mapbox", "icon": "SiMapbox" },
+      { "name": "MongoDB", "icon": "SiMongodb" },
+      { "name": "Node.js", "icon": "SiNodejs" }
+    ]
+  },
+  {
+    "type": "trading",
+    "title": "Plataforma de trading de commodities e insumos agrícolas com IA",
+    "description": "Automação de processos manuais e com uso de planilhas para gerenciar 80+ Grupos de WhatsApp.",
+    "achievements": [
+      {
+        "title": "Automação de operações de logística",
+        "description": "Automação de processos desde a criação do contrato até um fechamento de frete e monitoramento de todo processo até o cliente final."
+      },
+      {
+        "title": "Monitoramento de documentos de toda operação",
+        "description": "Monitoramento de ordens de carregamento, notas fiscais, comprovantes de pagamento e descarga, e entre outros."
+      },
+      {
+        "title": "Gestão de contratos",
+        "description": "Gestão de contratos de compra e venda de commodities e insumos agrícolas"
+      },
+      {
+        "title": "Notificações e alertas com IA no WhatsApp",
+        "description": "Notificações e alertas com IA no WhatsApp para todo processo de mudança de status da operação, envio de documentos, cancelamentos, análise de contratos e entrou outros."
+      },
+      {
+        "title": "Precificador",
+        "description": "Precificador de posição de compra eventuais destinos, considerando dados fiscais e custo logístico para previsão de preços e tomada de decisões de compra e venda."
+      },
+      {
+        "title": "Integração com ERP",
+        "description": "Integração com ERP para gerenciamento de contratos, documentos, pagamentos e entre outros."
+      }
+    ],
+    "techStack": [
+      { "name": "React", "icon": "SiReact" },
+      { "name": "Tailwind CSS", "icon": "SiTailwindcss" },
+      { "name": "Next.js", "icon": "SiNextdotjs" },
+      { "name": "TypeScript", "icon": "SiTypescript" },
+      { "name": "OpenAI", "icon": "SiOpenai" },
+      { "name": "N8N", "icon": "SiN8n" },
+      { "name": "MongoDB", "icon": "SiMongodb" },
+      { "name": "Claude", "icon": "SiClaude" },
+      { "name": "Node.js", "icon": "FaNodeJs" }
+    ]
   }
 ]

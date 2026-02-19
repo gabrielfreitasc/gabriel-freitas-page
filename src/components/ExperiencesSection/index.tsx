@@ -1,5 +1,7 @@
 import ScrollFloat from '../ui/ScrollFloat'
 import { ConsultancyPlataform } from './ConsultancyPlataform'
+import { GeoMapPlataform } from './GeoMapPlataform'
+import { TradingPlataform } from './TradingPlataform'
 
 export function ExperiencesSection() {
   return (
@@ -17,6 +19,8 @@ export function ExperiencesSection() {
         </ScrollFloat>
       </div>
       <ConsultancyPlataform />
+      <GeoMapPlataform />
+      <TradingPlataform />
     </section>
   )
 }

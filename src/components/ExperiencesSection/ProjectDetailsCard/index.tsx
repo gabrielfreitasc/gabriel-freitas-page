@@ -1,4 +1,5 @@
-import { IconType } from 'react-icons'
+import type { IconType } from 'react-icons'
+import { getIcon } from '../iconMap'
 
 interface Achievement {
   title: string
@@ -7,7 +8,7 @@ interface Achievement {
 
 interface TechStack {
   name: string
-  icon: IconType
+  icon: string | IconType
 }
 
 interface ProjectDetailsCardProps {
@@ -71,15 +72,19 @@ export function ProjectDetailsCard({
       {/* Footer com Stacks */}
       <div className="">
         <div className="flex items-center gap-2 flex-wrap justify-end">
-          {techStack.map(({ name, icon: Icon }) => (
-            <span
-              key={name}
-              className="px-3 py-1.5 bg-gradient-to-tr from-gray-800/60 to-gray-700/60 text-gray-300 text-xs font-medium rounded-lg border border-gray-700/50 hover:border-gray-500 hover:bg-gray-800/80 transition-all duration-200 flex items-center gap-2"
-            >
-              <Icon className="text-sm" />
-              {name}
-            </span>
-          ))}
+          {techStack.map(({ name, icon }) => {
+            const Icon = getIcon(icon)
+            if (!Icon) return null
+            return (
+              <span
+                key={name}
+                className="px-3 py-1.5 bg-gradient-to-tr from-gray-800/60 to-gray-700/60 text-gray-300 text-xs font-medium rounded-lg border border-gray-700/50 hover:border-gray-500 hover:bg-gray-800/80 transition-all duration-200 flex items-center gap-2"
+              >
+                <Icon className="text-sm" />
+                {name}
+              </span>
+            )
+          })}
         </div>
       </div>
     </div>
