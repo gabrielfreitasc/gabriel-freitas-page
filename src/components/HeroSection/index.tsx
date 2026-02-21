@@ -5,7 +5,7 @@ import {
 } from '@phosphor-icons/react'
 import { motion } from 'framer-motion'
 import { RefObject } from 'react'
-import LiquidEther from '../ui/LiquidEtherBackground'
+import { LaurelWreath } from '../LaurelWreath'
 import RotatingText from '../ui/TextUI/RotatingText'
 import ShuffleText from '../ui/TextUI/ShuffleText'
 import { Dock, DockIcon } from '../ui/dock'
@@ -30,9 +30,13 @@ export function HeroSection({ containerRef }: HeroSectionProps) {
     document.body.removeChild(link)
   }
   return (
-    <section className="w-[100vw] h-[100vh] flex flex-col items-center justify-center gap-2 relative">
-      <div className="absolute inset-0 z-0 w-full h-full" data-speed="0.5">
+    <section className="w-[100vw] h-[100vh] flex flex-col items-center justify-center gap-2 relative bg-neutral-950">
+      {/* <div
+        className="absolute inset-0 z-0 w-full h-full bg-neutral-950"
+        data-speed="0.5"
+      >
         <LiquidEther
+          backgroundColor="#0a0a0a"
           colors={['#C7C7C7', '#B5B2B3', '#CFCFCF']}
           mouseForce={20}
           cursorSize={100}
@@ -49,7 +53,7 @@ export function HeroSection({ containerRef }: HeroSectionProps) {
           autoResumeDelay={3000}
           autoRampDuration={0.6}
         />
-      </div>
+      </div> */}
       <motion.div
         initial={{ opacity: 0, y: -50 }}
         animate={{ opacity: 1, y: 0 }}
@@ -121,6 +125,9 @@ export function HeroSection({ containerRef }: HeroSectionProps) {
         </div>
 
         {/* // Cursos relevantes */}
+        <div className="flex items-center justify-center absolute right-0 left-0 -bottom-[50%]">
+          <LaurelWreath containerStyle="!size-[10%]" />
+        </div>
       </motion.div>
     </section>
   )

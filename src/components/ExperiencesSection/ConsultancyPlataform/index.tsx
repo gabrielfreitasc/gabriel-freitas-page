@@ -1,5 +1,6 @@
 'use client'
 
+import { ExperienceCard } from '@/components/ExperienceCard'
 import {
   CaretLeftIcon,
   CaretRightIcon,
@@ -16,7 +17,6 @@ import {
   ResponsiveContainer,
 } from 'recharts'
 import projectData from '../../../mock/experiences.json'
-import { MacOSWindowTemplate } from '../MacOSWindowTemplate'
 import { ProjectDetailsCard } from '../ProjectDetailsCard'
 
 const radarData = [
@@ -38,9 +38,9 @@ export function ConsultancyPlataform() {
     return null
   }
   return (
-    <MacOSWindowTemplate title="Plataforma de consultoria veterinária de leite e planejamento de projetos">
-      <div className="w-full h-[40rem] flex items-center gap-2 bg-white rounded-b-xl">
-        <div className="w-[40%] ml-5 h-[95%] flex flex-col items-start p-6 pt-2 bg-gradient-to-br from-zinc-50 to-zinc-100 rounded-xl border border-zinc-200">
+    <div className="w-full h-auto flex items-center gap-2">
+      <ExperienceCard direction="left">
+        <div className="w-full h-full flex flex-col items-start p-6 pt-2 bg-gradient-to-br from-zinc-50 to-zinc-100 border border-zinc-200">
           <div className="w-full flex items-center gap-2 p-6">
             <div className="relative w-24 h-24 rounded-full overflow-hidden border-4 border-zinc-500 shadow-xl">
               <IoPerson size={90} className="text-zinc-500 mt-1" />
@@ -79,7 +79,7 @@ export function ConsultancyPlataform() {
             </ResponsiveContainer>
           </div>
 
-          <div className="w-full bg-white rounded-2xl shadow-lg border border-gray-200 p-3">
+          <div className="w-full bg-white rounded-2xl shadow-lg border border-gray-200 p-3 mb-3">
             {/* Header do calendário */}
             <div className="flex items-center mb-4">
               <CaretLeftIcon
@@ -109,15 +109,15 @@ export function ConsultancyPlataform() {
 
             {/* Dias da semana */}
             {/* <div className="grid grid-cols-7 gap-1">
-                {['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sab'].map(day => (
-                  <div
-                    key={day}
-                    className="text-center text-xs font-medium text-gray-700 py-1"
-                  >
-                    {day}
-                  </div>
-                ))}
-              </div> */}
+                  {['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sab'].map(day => (
+                    <div
+                      key={day}
+                      className="text-center text-xs font-medium text-gray-700 py-1"
+                    >
+                      {day}
+                    </div>
+                  ))}
+                </div> */}
 
             {/* Dias do mês */}
             <div className="grid grid-cols-12 gap-1">
@@ -135,13 +135,13 @@ export function ConsultancyPlataform() {
             </div>
           </div>
         </div>
-        <ProjectDetailsCard
-          title={consultancyData.title}
-          description={consultancyData.description}
-          achievements={consultancyData.achievements}
-          techStack={consultancyData.techStack}
-        />
-      </div>
-    </MacOSWindowTemplate>
+      </ExperienceCard>
+      <ProjectDetailsCard
+        title={consultancyData.title}
+        description={consultancyData.description}
+        achievements={consultancyData.achievements}
+        techStack={consultancyData.techStack}
+      />
+    </div>
   )
 }

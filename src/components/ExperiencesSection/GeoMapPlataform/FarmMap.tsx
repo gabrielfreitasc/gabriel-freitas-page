@@ -131,13 +131,18 @@ export function FarmMap() {
       center={FARM_CENTER}
       zoom={ZOOM}
       className="h-full w-full rounded-xl z-0"
-      scrollWheelZoom={true}
+      scrollWheelZoom={false}
+      dragging={false}
+      zoomControl={false}
+      doubleClickZoom={false}
+      touchZoom={false}
+      boxZoom={false}
+      keyboard={false}
     >
       <TileLayer
         attribution='&copy; <a href="https://www.esri.com/">Esri</a>'
         url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"
       />
-      <DrawControl />
       {TALHOES.map((talhao, i) => {
         const Icon = CROP_ICONS[talhao.crop]
         const label = `Talhão ${String(i + 1).padStart(2, '0')}`

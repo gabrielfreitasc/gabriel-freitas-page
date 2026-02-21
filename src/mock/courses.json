@@ -18,12 +18,6 @@
     "emissionDate": "Outubro 2023"
   },
   {
-    "name": "NLW IA - Rocketseat",
-    "description": "Desenvolvimento do projeto Upload.AI, uma aplicação web voltada para manipulação de mídia com inteligência artificial. A aplicação realiza transcrição de áudio de vídeos e geração automática de títulos e descrições usando APIs de IA. Na trilha avançada, foram exploradas tecnologias como WebAssembly e FFMPEG para processamento de vídeo e áudio diretamente no navegador. Stack utilizada: Node.js com TypeScript no backend, React com Vite no frontend e integração com APIs da OpenAI para recursos de IA.",
-    "image": "https://i.postimg.cc/WhXkjTF5/Captura-de-Tela-2026-02-15-a-s-14-09-57.png",
-    "emissionDate": "Setembro 2023"
-  },
-  {
     "name": "Curso de JavaScript e TypeScript do básico ao avançado - Udemy",
     "description": "Formação full-stack em JavaScript e TypeScript cobrindo desde fundamentos da linguagem até construção de aplicações modernas. O curso abordou Node.js, Express, MongoDB, MySQL/MariaDB, criação de APIs REST, autenticação com session e JWT, além de React com Hooks, Redux e Redux-Saga. Também incluiu conceitos de orientação a objetos, princípios SOLID, testes automatizados com Jest, uso de ORMs como Sequelize e Mongoose, configuração de servidores Linux para deploy seguro (SSH e HTTPS) e introdução a NestJS, Strapi e PostgreSQL. Conteúdos extras envolveram HTML5, CSS3, Webpack, Babel, Expressões Regulares e Design Patterns.",
     "image": "https://udemy-certificate.s3.amazonaws.com/image/UC-fa8c3215-370a-4989-b26e-e387bb30f628.jpg?v=1689724720000",

@@ -2,6 +2,7 @@
 
 import React, { useEffect, useRef } from 'react'
 import * as THREE from 'three'
+import GradualBlurMemo from '../GradualBlur'
 
 export interface LiquidEtherProps {
   mouseForce?: number
@@ -23,6 +24,7 @@ export interface LiquidEtherProps {
   takeoverDuration?: number
   autoResumeDelay?: number
   autoRampDuration?: number
+  backgroundColor?: string
 }
 
 interface SimOptions {
@@ -76,6 +78,7 @@ export default function LiquidEther({
   takeoverDuration = 0.25,
   autoResumeDelay = 1000,
   autoRampDuration = 0.6,
+  backgroundColor,
 }: LiquidEtherProps): React.ReactElement {
   const mountRef = useRef<HTMLDivElement | null>(null)
   const webglRef = useRef<LiquidEtherWebGL | null>(null)
@@ -115,8 +118,17 @@ export default function LiquidEther({
     }
 
     const paletteTex = makePaletteTexture(colors)
-    // Hard-code transparent background vector (alpha 0)
-    const bgVec4 = new THREE.Vector4(0, 0, 0, 0)
+    // Background color: opaque se backgroundColor for fornecido, senão transparente
+    let bgVec4: THREE.Vector4
+    if (backgroundColor) {
+      const hex = backgroundColor.replace('#', '')
+      const r = parseInt(hex.slice(0, 2), 16) / 255
+      const g = parseInt(hex.slice(2, 4), 16) / 255
+      const b = parseInt(hex.slice(4, 6), 16) / 255
+      bgVec4 = new THREE.Vector4(r, g, b, 1.0)
+    } else {
+      bgVec4 = new THREE.Vector4(0, 0, 0, 0)
+    }
 
     class CommonClass {
       width = 0
@@ -1283,8 +1295,19 @@ export default function LiquidEther({
   return (
     <div
       ref={mountRef}
-      className={`w-full h-full relative overflow-hidden ${className || ''}`}
+      className={`w-full h-full relative overflow-hidden bg-neutral-950 ${className || ''}`}
       style={style}
-    />
+    >
+      <GradualBlurMemo
+        target="parent"
+        position="bottom"
+        height="6rem"
+        strength={2}
+        divCount={5}
+        curve="bezier"
+        exponential={true}
+        opacity={1}
+      />
+    </div>
   )
 }

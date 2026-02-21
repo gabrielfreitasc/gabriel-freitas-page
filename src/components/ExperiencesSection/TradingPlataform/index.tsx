@@ -1,5 +1,5 @@
+import { ExperienceCard } from '@/components/ExperienceCard'
 import projectData from '../../../mock/experiences.json'
-import { MacOSWindowTemplate } from '../MacOSWindowTemplate'
 import { ProjectDetailsCard } from '../ProjectDetailsCard'
 import { WhatsAppChat } from './WhatsAppChat'
 
@@ -9,18 +9,17 @@ export function TradingPlataform() {
     return null
   }
   return (
-    <MacOSWindowTemplate title="Plataforma de trading de commodities e insumos agrícolas com IA">
-      <div className="w-full h-[50rem] flex items-center gap-2 bg-white rounded-b-xl">
-        <div className="w-[50%] ml-5 h-[95%] min-h-0">
-          <WhatsAppChat />
-        </div>
-        <ProjectDetailsCard
-          title={tradingData.title}
-          description={tradingData.description}
-          achievements={tradingData.achievements}
-          techStack={tradingData.techStack}
-        />
-      </div>
-    </MacOSWindowTemplate>
+    <div className="w-full h-auto flex items-start gap-2">
+      <ExperienceCard direction="left">
+        <WhatsAppChat />
+      </ExperienceCard>
+      <ProjectDetailsCard
+        className="!pt-0"
+        title={tradingData.title}
+        description={tradingData.description}
+        achievements={tradingData.achievements}
+        techStack={tradingData.techStack}
+      />
+    </div>
   )
 }

@@ -133,7 +133,8 @@ body {
 }
 
 @keyframes float {
-  0%, 100% {
+  0%,
+  100% {
     transform: translateY(-50%) translateX(0);
   }
   50% {
@@ -143,4 +144,20 @@ body {
 
 .animate-float {
   animation: float 3s ease-in-out infinite;
+}
+
+.floating-animation {
+  animation: floating 3s ease-in-out infinite;
+}
+
+@keyframes floating {
+  0% {
+    transform: translate(-50%, -50%);
+  }
+  50% {
+    transform: translate(-50%, -55%);
+  }
+  100% {
+    transform: translate(-50%, -50%);
+  }
 }

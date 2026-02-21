@@ -252,7 +252,7 @@ export function WhatsAppChat() {
   return (
     <div
       ref={containerRef}
-      className="w-full h-full flex flex-col overflow-hidden rounded-xl border border-zinc-700/50"
+      className="w-full h-full flex flex-col overflow-hidden"
       style={{
         backgroundColor: '#E2E2E2',
         backgroundImage: CHAT_BG_PATTERN,

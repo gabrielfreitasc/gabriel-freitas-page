@@ -1,8 +1,8 @@
 'use client'
 
+import { ExperienceCard } from '@/components/ExperienceCard'
 import dynamic from 'next/dynamic'
 import projectData from '../../../mock/experiences.json'
-import { MacOSWindowTemplate } from '../MacOSWindowTemplate'
 import { ProjectDetailsCard } from '../ProjectDetailsCard'
 import { CROP_COLORS } from './FarmMap'
 
@@ -30,10 +30,16 @@ export function GeoMapPlataform() {
     return null
   }
   return (
-    <MacOSWindowTemplate title="Mapeamento de talhões de fazendas via satélite">
-      <div className="w-full h-[40rem] flex items-center gap-2 bg-white rounded-b-xl">
-        <div className="w-[50%] ml-5 h-[95%] flex flex-col gap-3">
-          <div className="flex-1 min-h-0 relative rounded-xl border border-zinc-200 overflow-hidden bg-zinc-100">
+    <div className="w-full h-auto flex items-center gap-2">
+      <ProjectDetailsCard
+        title={geoMapData.title}
+        description={geoMapData.description}
+        achievements={geoMapData.achievements}
+        techStack={geoMapData.techStack}
+      />
+      <ExperienceCard direction="right">
+        <div className="w-full h-full flex flex-col gap-3">
+          <div className="flex-1 min-h-0 relative rounded-xl overflow-hidden bg-zinc-100">
             <FarmMap />
             <div className="absolute bottom-3 left-3 z-[1000] bg-white/95 backdrop-blur-sm rounded-lg px-3 py-2 shadow-lg border border-zinc-200">
               <p className="text-xs font-semibold text-zinc-700 mb-2">
@@ -56,14 +62,7 @@ export function GeoMapPlataform() {
             </div>
           </div>
         </div>
-        <ProjectDetailsCard
-          className="!w-[50%]"
-          title={geoMapData.title}
-          description={geoMapData.description}
-          achievements={geoMapData.achievements}
-          techStack={geoMapData.techStack}
-        />
-      </div>
-    </MacOSWindowTemplate>
+      </ExperienceCard>
+    </div>
   )
 }

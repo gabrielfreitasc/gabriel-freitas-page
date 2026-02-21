@@ -1,10 +1,10 @@
 import gsap from 'gsap'
-import Link from 'next/link'
+import { ScrollSmoother } from 'gsap/ScrollSmoother'
 import { useEffect, useRef, useState } from 'react'
 import { IconType } from 'react-icons'
 import { GoHome } from 'react-icons/go'
 import { HiDocumentText } from 'react-icons/hi'
-import { IoLogoNodejs, IoMail } from 'react-icons/io5'
+import { IoLogoNodejs } from 'react-icons/io5'
 import { MdWork } from 'react-icons/md'
 
 export function NavBar() {
@@ -32,17 +32,33 @@ export function NavBar() {
     }
   }, [linkHovered])
 
+  const handleNavClick = (
+    e: React.MouseEvent,
+    link: (typeof navLinks)[number]
+  ) => {
+    e.preventDefault()
+    setActiveLink(link.name)
+    const smoother = ScrollSmoother.get()
+    if (smoother) {
+      smoother.scrollTo(`#${link.sectionId}`, true)
+    } else {
+      document
+        .getElementById(link.sectionId)
+        ?.scrollIntoView({ behavior: 'smooth' })
+    }
+  }
+
   return (
     <nav className="fixed right-6 top-1/2 z-[999] animate-float">
       <ul className="flex flex-col items-center gap-6 p-4 rounded-full bg-zinc-900/60 backdrop-blur-md border border-zinc-800 shadow-2xl transition-all duration-300 hover:scale-105">
-        {navLinks.map((link, index) => (
+        {navLinks.map(link => (
           <li key={link.name} className="relative group">
-            <Link
-              href={link.url}
-              onClick={() => setActiveLink(link.name)}
+            <a
+              href={`#${link.sectionId}`}
+              onClick={e => handleNavClick(e, link)}
               className={`
                 w-8 h-8 rounded-full flex items-center justify-center
-                transition-all duration-300 ease-out 
+                transition-all duration-300 ease-out
                 ${
                   activeLink === link.name
                     ? 'bg-white/80 text-zinc-800 scale-110'
@@ -53,7 +69,7 @@ export function NavBar() {
               onMouseLeave={() => setLinkHovered(null)}
             >
               <link.icon className="text-xl rotate-icon" />
-            </Link>
+            </a>
             {linkHovered === link.name && (
               <span
                 ref={spanRef}
@@ -69,10 +85,9 @@ export function NavBar() {
   )
 }
 
-const navLinks: { name: string; url: string; icon: IconType }[] = [
-  { name: 'Página Inicial', url: '/', icon: GoHome },
-  { name: 'Stacks', url: '/stacks', icon: IoLogoNodejs },
-  { name: 'Experiências', url: '/experiences', icon: MdWork },
-  { name: 'Cursos', url: '/courses', icon: HiDocumentText },
-  { name: 'Contato', url: '/contact', icon: IoMail },
+const navLinks: { name: string; sectionId: string; icon: IconType }[] = [
+  { name: 'Página Inicial', sectionId: 'hero', icon: GoHome },
+  { name: 'Stacks', sectionId: 'stacks', icon: IoLogoNodejs },
+  { name: 'Experiências', sectionId: 'experiences', icon: MdWork },
+  { name: 'Cursos', sectionId: 'courses', icon: HiDocumentText },
 ]
