@@ -1,3 +1,11 @@
+import {
+  AnimatePresence,
+  motion,
+  Transition,
+  type Target,
+  type TargetAndTransition,
+  type VariantLabels,
+} from 'motion/react'
 import React, {
   forwardRef,
   useCallback,
@@ -6,18 +14,6 @@ import React, {
   useMemo,
   useState,
 } from 'react'
-import {
-  motion,
-  AnimatePresence,
-  Transition,
-  type VariantLabels,
-  type Target,
-  type TargetAndTransition,
-} from 'motion/react'
-
-function cn(...classes: (string | undefined | null | boolean)[]): string {
-  return classes.filter(Boolean).join(' ')
-}
 
 export interface RotatingTextRef {
   next: () => void
@@ -197,10 +193,7 @@ const RotatingText = forwardRef<RotatingTextRef, RotatingTextProps>(
 
     return (
       <motion.span
-        className={cn(
-          'flex flex-wrap whitespace-pre-wrap relative',
-          mainClassName
-        )}
+        className={`flex flex-wrap whitespace-pre-wrap relative ${mainClassName}`}
         {...rest}
         layout
         transition={transition}
@@ -212,11 +205,7 @@ const RotatingText = forwardRef<RotatingTextRef, RotatingTextProps>(
         >
           <motion.span
             key={currentTextIndex}
-            className={cn(
-              splitBy === 'lines'
-                ? 'flex flex-col w-full'
-                : 'flex flex-wrap whitespace-pre-wrap relative'
-            )}
+            className={`${splitBy === 'lines' ? 'flex flex-col w-full' : 'flex flex-wrap whitespace-pre-wrap relative'}`}
             layout
             aria-hidden="true"
           >
@@ -227,7 +216,7 @@ const RotatingText = forwardRef<RotatingTextRef, RotatingTextProps>(
               return (
                 <span
                   key={wordIndex}
-                  className={cn('inline-flex', splitLevelClassName)}
+                  className={`inline-flex ${splitLevelClassName}`}
                 >
                   {wordObj.characters.map((char, charIndex) => (
                     <motion.span
@@ -245,7 +234,7 @@ const RotatingText = forwardRef<RotatingTextRef, RotatingTextProps>(
                           )
                         ),
                       }}
-                      className={cn('inline-block', elementLevelClassName)}
+                      className={`inline-block ${elementLevelClassName}`}
                     >
                       {char}
                     </motion.span>
