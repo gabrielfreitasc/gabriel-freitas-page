@@ -32,7 +32,7 @@ export const TweetCard = forwardRef<HTMLDivElement, TweetCardProps>(
       <div
         ref={ref}
         style={{ animationDelay: `${index * 0.1}s` }}
-        className={`group/card w-[320px] h-[500px] absolute top-1/2 left-1/2 -translate-x-1/2 ${!disableFloat ? 'floating-animation' : ''}`}
+        className={`group/card w-[200px] h-[330px] sm:w-[320px] sm:h-[500px] absolute top-1/2 left-1/2 -translate-x-1/2 ${!disableFloat ? 'floating-animation' : ''}`}
       >
         <div
           style={{ perspective: 1000 }}

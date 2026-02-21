@@ -75,6 +75,7 @@ const useResizeObserver = (
     return () => {
       observers.forEach(observer => observer?.disconnect())
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, dependencies)
 }
 
@@ -115,6 +116,7 @@ const useImageLoader = (
         img.removeEventListener('error', handleImageLoad)
       })
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, dependencies)
 }
 
@@ -198,6 +200,7 @@ const useAnimationLoop = (
       }
       lastTimestampRef.current = null
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [targetVelocity, seqWidth, seqHeight, isHovered, hoverSpeed, isVertical])
 }
 
@@ -374,6 +377,7 @@ export const LogoLoop = React.memo<LogoLoopProps>(
             {(item as any).node}
           </span>
         ) : (
+          // eslint-disable-next-line @next/next/no-img-element
           <img
             className={cx(
               'h-[var(--logoloop-logoHeight)] w-auto block object-contain',

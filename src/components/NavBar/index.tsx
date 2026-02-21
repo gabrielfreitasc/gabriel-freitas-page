@@ -49,8 +49,8 @@ export function NavBar() {
   }
 
   return (
-    <nav className="fixed right-6 top-1/2 z-[999] animate-float">
-      <ul className="flex flex-col items-center gap-6 p-4 rounded-full bg-zinc-900/60 backdrop-blur-md border border-zinc-800 shadow-2xl transition-all duration-300 hover:scale-105">
+    <nav className="fixed z-[999] animate-float bottom-4 left-1/2 -translate-x-1/2 sm:bottom-auto sm:left-auto sm:right-6 sm:top-1/2 sm:translate-x-0">
+      <ul className="flex flex-row sm:flex-col items-center gap-4 sm:gap-6 p-3 sm:p-4 rounded-full bg-zinc-900/60 backdrop-blur-md border border-zinc-800 shadow-2xl transition-all duration-300 hover:scale-105">
         {navLinks.map(link => (
           <li key={link.name} className="relative group">
             <a
@@ -73,7 +73,7 @@ export function NavBar() {
             {linkHovered === link.name && (
               <span
                 ref={spanRef}
-                className="absolute right-16 top-1/2 -translate-y-1/2 w-fit rounded-full bg-zinc-900/60 border border-zinc-800 px-3 py-1.5 text-xs text-white whitespace-nowrap backdrop-blur-sm"
+                className="hidden sm:block absolute right-16 top-1/2 -translate-y-1/2 w-fit rounded-full bg-zinc-900/60 border border-zinc-800 px-3 py-1.5 text-xs text-white whitespace-nowrap backdrop-blur-sm"
               >
                 {link.name}
               </span>

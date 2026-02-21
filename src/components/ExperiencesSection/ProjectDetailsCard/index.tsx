@@ -28,12 +28,12 @@ export function ProjectDetailsCard({
   className = '',
 }: ProjectDetailsCardProps) {
   return (
-    <div className={`w-full h-full p-8 flex flex-col gap-6 ${className}`}>
+    <div className={`w-full h-full p-4 sm:p-8 flex flex-col gap-4 sm:gap-6 ${className}`}>
       <div className="space-y-3">
         <div className="flex items-center gap-3 mb-4">
           <div className="h-10 w-1 bg-gradient-to-b from-gray-300 to-gray-500 rounded-full"></div>
           <BlockRevealText scrollStart="top 85%">
-            <h3 className="text-3xl font-bold text-white tracking-tight">
+            <h3 className="text-xl sm:text-3xl font-bold text-white tracking-tight">
               {title}
             </h3>
           </BlockRevealText>
@@ -46,7 +46,7 @@ export function ProjectDetailsCard({
       </div>
 
       <div className="space-y-4 mt-2">
-        <div className="grid grid-cols-2 gap-3">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           {achievements.map((achievement, index) => (
             <div
               key={index}

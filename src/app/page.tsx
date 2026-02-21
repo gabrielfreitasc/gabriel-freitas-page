@@ -62,7 +62,7 @@ export default function Home() {
         <div id="smooth-content">
           <main
             ref={containerRef}
-            className="flex min-h-screen w-full flex-col items-center relative"
+            className="flex min-h-screen w-full flex-col items-center relative pb-24 sm:pb-0"
           >
             <Logo width={50} height={50} />
             <section id="hero" className="w-full">

@@ -30,7 +30,7 @@ export function GeoMapPlataform() {
     return null
   }
   return (
-    <div className="w-full h-auto flex items-center gap-2">
+    <div className="w-full h-auto flex flex-col-reverse sm:flex-row items-center gap-6 sm:gap-2">
       <ProjectDetailsCard
         title={geoMapData.title}
         description={geoMapData.description}

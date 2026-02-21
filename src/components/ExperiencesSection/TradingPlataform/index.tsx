@@ -9,7 +9,7 @@ export function TradingPlataform() {
     return null
   }
   return (
-    <div className="w-full h-auto flex items-start gap-2">
+    <div className="w-full h-auto flex flex-col sm:flex-row items-center sm:items-start gap-6 sm:gap-2">
       <ExperienceCard direction="left">
         <WhatsAppChat />
       </ExperienceCard>

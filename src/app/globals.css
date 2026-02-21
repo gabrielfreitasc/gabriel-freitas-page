@@ -142,8 +142,11 @@ body {
   }
 }
 
-.animate-float {
-  animation: float 3s ease-in-out infinite;
+/* float animation applied only on sm+ so the NavBar can use bottom-dock on mobile */
+@media (min-width: 640px) {
+  .animate-float {
+    animation: float 3s ease-in-out infinite;
+  }
 }
 
 .floating-animation {

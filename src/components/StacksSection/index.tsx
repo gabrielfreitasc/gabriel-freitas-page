@@ -129,8 +129,8 @@ function IconCard({
         ref={figureRef}
         className={`relative flex flex-col items-center justify-center rounded-2xl border backdrop-blur-md cursor-pointer overflow-hidden ${
           isCenter
-            ? 'p-10 border-white/20 bg-gradient-to-br from-white/10 to-white/20 text-white shadow-2xl shadow-black/40'
-            : 'p-6 border-white/10 bg-gradient-to-br from-white/10 to-white/20 text-gray-300 opacity-75'
+            ? 'p-5 sm:p-10 border-white/20 bg-gradient-to-br from-white/10 to-white/20 text-white shadow-2xl shadow-black/40'
+            : 'p-3 sm:p-6 border-white/10 bg-gradient-to-br from-white/10 to-white/20 text-gray-300 opacity-75'
         }`}
         style={{ perspective: '800px' }}
         onMouseMove={handleMouse}
@@ -139,12 +139,14 @@ function IconCard({
       >
         {/* Motion div — aplica rotateX/Y/scale por spring */}
         <motion.div
-          className="flex flex-col items-center gap-5 [transform-style:preserve-3d]"
+          className="flex flex-col items-center gap-3 sm:gap-5 [transform-style:preserve-3d]"
           style={{ rotateX, rotateY, scale }}
         >
           {/* Ícone na camada base */}
-          <div className="[transform:translateZ(0px)]">
-            <Icon size={isCenter ? 102 : 74} />
+          <div
+            className={`[transform:translateZ(0px)] ${isCenter ? 'text-[60px] sm:text-[102px]' : 'text-[44px] sm:text-[74px]'}`}
+          >
+            <Icon />
           </div>
 
           {/* Título flutuando acima (translateZ) */}
@@ -200,10 +202,10 @@ export function StacksSection() {
   }, [])
 
   return (
-    <section className="w-full min-h-screen flex flex-col items-start justify-start py-20 px-8 relative">
+    <section className="w-full min-h-screen flex flex-col items-start justify-start py-12 sm:py-20 px-4 sm:px-8 relative">
       <div className="w-full mb-16">
         <BlockRevealText className="my-5" scrollStart="top 90%">
-          <span className="text-7xl uppercase font-bold text-white">
+          <span className="text-4xl sm:text-7xl uppercase font-bold text-white">
             Stacks
           </span>
         </BlockRevealText>
@@ -213,21 +215,27 @@ export function StacksSection() {
           </span>
         </BlockRevealText>
 
-        <div className="w-full flex items-center justify-center gap-10 mt-16">
+        <div className="w-full flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-10 mt-16">
           {visibleIndices.map((iconIndex, position) => (
-            <IconCard
+            <div
               key={position}
-              iconIndex={iconIndex}
-              isCenter={position === 2}
-              cardRef={el => {
-                iconRefs.current[position] = el
-              }}
-            />
+              className={
+                position === 0 || position === 4 ? 'hidden sm:block' : ''
+              }
+            >
+              <IconCard
+                iconIndex={iconIndex}
+                isCenter={position === 2}
+                cardRef={el => {
+                  iconRefs.current[position] = el
+                }}
+              />
+            </div>
           ))}
         </div>
 
         <div className="flex items-center justify-center absolute right-0 left-0 bottom-0">
-          <LaurelWreath containerStyle="!size-[10%]" />
+          <LaurelWreath containerStyle="!size-[20%] sm:!size-[10%]" />
         </div>
       </div>
     </section>

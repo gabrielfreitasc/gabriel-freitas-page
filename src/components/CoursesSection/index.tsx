@@ -21,7 +21,8 @@ export function CoursesSection() {
       if (!cards.length) return
 
       const totalScrollHeight = window.innerHeight * 3
-      const positions = [10, 30, 50, 70, 90]
+      const isMobile = window.innerWidth < 640
+      const positions = isMobile ? [22, 36, 50, 64, 78] : [10, 30, 50, 70, 90]
       const rotations = [-15, -7.5, 0, 7.5, 15]
       const scales = [0.8, 0.9, 1, 0.9, 0.8]
       const zIndexes = [1, 2, 3, 2, 1]
@@ -59,12 +60,12 @@ export function CoursesSection() {
   return (
     <section
       ref={container}
-      className="w-full min-h-screen flex flex-col items-start justify-start py-20 px-8"
+      className="w-full min-h-screen flex flex-col items-start justify-start py-12 sm:py-20 px-4 sm:px-8"
       data-speed="1"
     >
       <div className="w-full mb-5">
         <BlockRevealText className="my-5" scrollStart="top bottom">
-          <span className="text-7xl uppercase font-bold text-white mr-auto">
+          <span className="text-4xl sm:text-7xl uppercase font-bold text-white mr-auto">
             Cursos relevantes
           </span>
         </BlockRevealText>
@@ -72,7 +73,7 @@ export function CoursesSection() {
 
       <div
         ref={fanRef}
-        className="w-full h-[600px] flex items-center justify-center overflow-visible relative"
+        className="w-full h-[380px] sm:h-[600px] flex items-center justify-center overflow-visible relative"
       >
         {courses.map((course: any, index) => (
           <TweetCard

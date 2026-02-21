@@ -1226,6 +1226,7 @@ export default function LiquidEther({
     }
   }, [
     BFECC,
+    backgroundColor,
     cursorSize,
     dt,
     isBounce,

@@ -38,12 +38,19 @@ export function ConsultancyPlataform() {
     return null
   }
   return (
-    <div className="w-full h-auto flex items-center gap-2">
+    <div className="w-full h-auto flex flex-col sm:flex-row items-center gap-6 sm:gap-2">
       <ExperienceCard direction="left">
-        <div className="w-full h-full flex flex-col items-start p-6 pt-2 bg-gradient-to-br from-zinc-50 to-zinc-100 border border-zinc-200">
-          <div className="w-full flex items-center gap-2 p-6">
-            <div className="relative w-24 h-24 rounded-full overflow-hidden border-4 border-zinc-500 shadow-xl">
-              <IoPerson size={90} className="text-zinc-500 mt-1" />
+        <div className="w-full h-full flex flex-col items-start p-4 sm:p-6 pt-2 bg-gradient-to-br from-zinc-50 to-zinc-100 border border-zinc-200">
+          <div className="w-full flex items-center gap-2 p-3 sm:p-6">
+            <div className="relative w-16 h-16 sm:w-24 sm:h-24 rounded-full overflow-hidden border-4 border-zinc-500 shadow-xl">
+              <IoPerson
+                size={90}
+                className="text-zinc-500 mt-1 hidden sm:block"
+              />
+              <IoPerson
+                size={60}
+                className="text-zinc-500 mt-1 block sm:hidden"
+              />
             </div>
             <div className="text-center flex flex-col items-start">
               <h3 className="text-lg font-bold text-zinc-900">João da Silva</h3>
@@ -54,7 +61,7 @@ export function ConsultancyPlataform() {
             </div>
           </div>
 
-          <div className="w-full p-3 h-80 flex flex-col items-start">
+          <div className="w-full p-3 h-44 sm:h-80 flex flex-col items-start">
             <p className="font-semibold text-black/70">Habilidades Técnicas</p>
             <ResponsiveContainer width="100%" height="100%">
               <RadarChart data={radarData}>
@@ -79,7 +86,7 @@ export function ConsultancyPlataform() {
             </ResponsiveContainer>
           </div>
 
-          <div className="w-full bg-white rounded-2xl shadow-lg border border-gray-200 p-3 mb-3">
+          <div className="hidden sm:block w-full bg-white rounded-2xl shadow-lg border border-gray-200 p-3 mb-3">
             {/* Header do calendário */}
             <div className="flex items-center mb-4">
               <CaretLeftIcon
@@ -120,7 +127,7 @@ export function ConsultancyPlataform() {
                 </div> */}
 
             {/* Dias do mês */}
-            <div className="grid grid-cols-12 gap-1">
+            <div className="grid grid-cols-7 sm:grid-cols-12 gap-1">
               {Array.from(
                 { length: moment().daysInMonth() },
                 (_, day) => day + 1

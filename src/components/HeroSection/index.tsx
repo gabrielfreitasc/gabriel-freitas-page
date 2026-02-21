@@ -78,10 +78,12 @@ export function HeroSection({ containerRef }: HeroSectionProps) {
           respectReducedMotion={true}
           loop={true}
           loopDelay={1.5}
-          className="!text-9xl uppercase font-bold text-white"
+          className="!text-5xl sm:!text-7xl lg:!text-9xl uppercase font-bold text-white"
         />
-        <div className="flex items-center justify-center gap-3 mb-20">
-          <p className="text-xl text-white font-bold">Desenvolvedor</p>
+        <div className="flex items-center justify-center gap-2 sm:gap-3 mb-10 sm:mb-20">
+          <p className="text-base sm:text-xl text-white font-bold">
+            Desenvolvedor
+          </p>
           <RotatingText
             texts={['Front-end', 'Back-end', 'Full Stack']}
             mainClassName="px-2 sm:px-2 md:px-3 liquid-background-blur text-white font-extrabold overflow-hidden py-0.5 sm:py-1 md:py-2 justify-center rounded-lg"
@@ -125,8 +127,8 @@ export function HeroSection({ containerRef }: HeroSectionProps) {
         </div>
 
         {/* // Cursos relevantes */}
-        <div className="flex items-center justify-center absolute right-0 left-0 -bottom-[50%]">
-          <LaurelWreath containerStyle="!size-[10%]" />
+        <div className="flex items-center justify-center absolute right-0 left-0 -bottom-[40%] sm:-bottom-[50%]">
+          <LaurelWreath containerStyle="!size-[20%] sm:!size-[10%]" />
         </div>
       </motion.div>
     </section>
