@@ -23,8 +23,8 @@ interface HeroSectionProps {
 export function HeroSection({ containerRef }: HeroSectionProps) {
   const handleDownloadPDF = () => {
     const link = document.createElement('a')
-    link.href = '/assets/Gabriel_Freitas_Coelho_Currículo.pdf'
-    link.download = 'Gabriel_Freitas_Coelho_Currículo.pdf'
+    link.href = '/assets/Gabriel_Freitas_Currículo.pdf'
+    link.download = 'Gabriel_Freitas_Currículo.pdf'
     document.body.appendChild(link)
     link.click()
     document.body.removeChild(link)
