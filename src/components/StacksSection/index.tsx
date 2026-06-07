@@ -169,11 +169,25 @@ function IconCard({
 // ─── StacksSection ─────────────────────────────────────────────────────────────
 
 export function StacksSection() {
+  const sectionRef = useRef<HTMLElement>(null)
   const iconRefs = useRef<(HTMLDivElement | null)[]>([null, null, null])
   const currentIndexRef = useRef(0)
   const [visibleIndices, setVisibleIndices] = useState(() => getIndices(0))
+  const [inView, setInView] = useState(false)
+
+  // Só anima o flip dos cards enquanto a seção está na viewport
+  useEffect(() => {
+    const el = sectionRef.current
+    if (!el) return
+    const io = new IntersectionObserver(([entry]) =>
+      setInView(entry.isIntersecting)
+    )
+    io.observe(el)
+    return () => io.disconnect()
+  }, [])
 
   useEffect(() => {
+    if (!inView) return
     const interval = setInterval(() => {
       const tl = gsap.timeline()
 
@@ -200,10 +214,13 @@ export function StacksSection() {
     }, 3000)
 
     return () => clearInterval(interval)
-  }, [])
+  }, [inView])
 
   return (
-    <section className="w-full min-h-screen flex flex-col items-start justify-start py-12 sm:py-20 px-4 sm:px-8 relative">
+    <section
+      ref={sectionRef}
+      className="w-full min-h-screen flex flex-col items-start justify-start py-12 sm:py-20 px-4 sm:px-8 relative"
+    >
       <BlackHole
         width="100vw"
         height="100vh"

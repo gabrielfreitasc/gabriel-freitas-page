@@ -13,12 +13,12 @@ export default function Preloader() {
     // Inicia o zoom+fade da logo
     const logoTimer = setTimeout(() => {
       setLogoExiting(true)
-    }, 5000)
+    }, 1200)
 
     // Após a animação da logo (700ms), some o background
     const exitTimer = setTimeout(() => {
       setIsLoading(false)
-    }, 5700)
+    }, 1900)
 
     return () => {
       clearTimeout(logoTimer)

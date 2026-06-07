@@ -2,10 +2,30 @@
 
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import dynamic from 'next/dynamic'
+import { useEffect, useRef } from 'react'
 import { BlockRevealText } from '../ui/BlockRevealText'
-import { ConsultancyPlataform } from './ConsultancyPlataform'
-import { GeoMapPlataform } from './GeoMapPlataform'
-import { TradingPlataform } from './TradingPlataform'
+
+// Placeholder com a mesma altura do ExperienceCard (aspect 714/800) para evitar layout shift
+const SlidePlaceholder = () => (
+  <div className="w-full flex items-center justify-center">
+    <div className="w-[900px] max-w-[95vw] aspect-[714/800]" />
+  </div>
+)
+
+// Carregadas sob demanda: recharts, moment e leaflet ficam fora do bundle inicial
+const ConsultancyPlataform = dynamic(
+  () => import('./ConsultancyPlataform').then(mod => mod.ConsultancyPlataform),
+  { ssr: false, loading: SlidePlaceholder }
+)
+const GeoMapPlataform = dynamic(
+  () => import('./GeoMapPlataform').then(mod => mod.GeoMapPlataform),
+  { ssr: false, loading: SlidePlaceholder }
+)
+const TradingPlataform = dynamic(
+  () => import('./TradingPlataform').then(mod => mod.TradingPlataform),
+  { ssr: false, loading: SlidePlaceholder }
+)
 
 const slides = [
   { id: 'consultancy', component: ConsultancyPlataform },
@@ -16,6 +36,25 @@ const slides = [
 gsap.registerPlugin(ScrollTrigger)
 
 export function ExperiencesSection() {
+  const stackRef = useRef<HTMLDivElement>(null)
+
+  // Recalcula os ScrollTriggers (pin da CoursesSection etc.) quando os chunks
+  // das plataformas chegam e a altura real substitui os placeholders
+  useEffect(() => {
+    const stack = stackRef.current
+    if (!stack) return
+    let raf = 0
+    const ro = new ResizeObserver(() => {
+      cancelAnimationFrame(raf)
+      raf = requestAnimationFrame(() => ScrollTrigger.refresh())
+    })
+    ro.observe(stack)
+    return () => {
+      cancelAnimationFrame(raf)
+      ro.disconnect()
+    }
+  }, [])
+
   return (
     <section className="relative w-full flex flex-col items-start px-4 sm:px-8">
       {/* Title scrolls away naturally — no pin until the card stack is in view */}
@@ -28,8 +67,11 @@ export function ExperiencesSection() {
       </div>
 
       {/* Card stack — fills the full viewport once pinned */}
-      <div className="relative w-full min-h-screen flex flex-col gap-16 sm:gap-32">
-        {slides.map(({ id, component: Component }, index) => (
+      <div
+        ref={stackRef}
+        className="relative w-full min-h-screen flex flex-col gap-16 sm:gap-32"
+      >
+        {slides.map(({ id, component: Component }) => (
           <div
             key={id}
             className="w-full h-full relative odd:left-0 even:right-0 sm:odd:left-[-2.5%] sm:even:right-[-2.5%]"

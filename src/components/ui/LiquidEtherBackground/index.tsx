@@ -25,6 +25,8 @@ export interface LiquidEtherProps {
   autoResumeDelay?: number
   autoRampDuration?: number
   backgroundColor?: string
+  /** Pausa o render loop externamente (ex.: quando o fundo está coberto por uma seção opaca) */
+  paused?: boolean
 }
 
 interface SimOptions {
@@ -79,6 +81,7 @@ export default function LiquidEther({
   autoResumeDelay = 1000,
   autoRampDuration = 0.6,
   backgroundColor,
+  paused = false,
 }: LiquidEtherProps): React.ReactElement {
   const mountRef = useRef<HTMLDivElement | null>(null)
   const webglRef = useRef<LiquidEtherWebGL | null>(null)
@@ -87,6 +90,7 @@ export default function LiquidEther({
   const intersectionObserverRef = useRef<IntersectionObserver | null>(null)
   const isVisibleRef = useRef<boolean>(true)
   const resizeRafRef = useRef<number | null>(null)
+  const pausedRef = useRef<boolean>(paused)
 
   useEffect(() => {
     if (!mountRef.current) return
@@ -1082,7 +1086,7 @@ export default function LiquidEther({
           const hidden = document.hidden
           if (hidden) {
             this.pause()
-          } else if (isVisibleRef.current) {
+          } else if (isVisibleRef.current && !pausedRef.current) {
             this.start()
           }
         }
@@ -1173,7 +1177,7 @@ export default function LiquidEther({
       if (resolution !== prevRes) sim.resize()
     }
     applyOptionsFromProps()
-    webgl.start()
+    if (!pausedRef.current) webgl.start()
 
     const io = new IntersectionObserver(
       entries => {
@@ -1181,7 +1185,7 @@ export default function LiquidEther({
         const isVisible = entry.isIntersecting && entry.intersectionRatio > 0
         isVisibleRef.current = isVisible
         if (!webglRef.current) return
-        if (isVisible && !document.hidden) {
+        if (isVisible && !document.hidden && !pausedRef.current) {
           webglRef.current.start()
         } else {
           webglRef.current.pause()
@@ -1244,6 +1248,18 @@ export default function LiquidEther({
     autoResumeDelay,
     autoRampDuration,
   ])
+
+  // Pausa/retoma o loop sem recriar a simulação
+  useEffect(() => {
+    pausedRef.current = paused
+    const webgl = webglRef.current
+    if (!webgl) return
+    if (paused) {
+      webgl.pause()
+    } else if (isVisibleRef.current && !document.hidden) {
+      webgl.start()
+    }
+  }, [paused])
 
   useEffect(() => {
     const webgl = webglRef.current

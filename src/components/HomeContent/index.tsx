@@ -14,16 +14,19 @@ import { useEffect, useRef } from 'react'
 
 gsap.registerPlugin(ScrollSmoother, ScrollTrigger)
 
+// Hoisted: arrays/objetos inline nas props re-inicializariam o WebGL a cada render
+const liquidColors = ['#C7C7C7', '#B5B2B3', '#CFCFCF']
+
 export default function HomeContent() {
   const containerRef = useRef<HTMLDivElement>(null)
   const smootherRef = useRef<ScrollSmoother | null>(null)
 
   useEffect(() => {
     smootherRef.current = ScrollSmoother.create({
-      smooth: 1.5,
+      smooth: 0.8,
       effects: true,
-      smoothTouch: 0.1,
-      normalizeScroll: true,
+      smoothTouch: false,
+      normalizeScroll: false,
     })
 
     return () => {
@@ -33,10 +36,13 @@ export default function HomeContent() {
 
   return (
     <>
-      <div className="fixed inset-0 -z-10">
+      {/* bg-[#0a0a0a]: fallback escuro — bg-neutral-950 não compila (DaisyUI
+          sobrescreve a escala `neutral`), então sem isso a página fica branca
+          até o canvas pintar o primeiro frame */}
+      <div className="fixed inset-0 -z-10 bg-[#0a0a0a]">
         <LiquidEther
           backgroundColor="#0a0a0a"
-          colors={['#C7C7C7', '#B5B2B3', '#CFCFCF']}
+          colors={liquidColors}
           mouseForce={20}
           cursorSize={100}
           isViscous={false}

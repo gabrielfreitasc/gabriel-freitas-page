@@ -178,8 +178,11 @@ export function useBlackHole(
     let time = 0
     let rafId = 0
     let currentQuality = initialCfg.quality
+    let running = false
+    let inViewport = true
 
     function tick() {
+      if (!running) return
       rafId = requestAnimationFrame(tick)
       const now = performance.now()
       const delta = (now - lastFrame) / 1000
@@ -221,10 +224,45 @@ export function useBlackHole(
       composer.render()
     }
 
-    tick()
+    function start() {
+      if (running) return
+      running = true
+      // Evita um delta gigante (e salto na órbita) ao retomar
+      lastFrame = performance.now()
+      rafId = requestAnimationFrame(tick)
+    }
+
+    function stop() {
+      running = false
+      cancelAnimationFrame(rafId)
+    }
+
+    // Pausa o ray-marching quando o canvas sai da viewport ou a aba fica oculta.
+    // intersectionRatio > 0: caixas que apenas se tocam (ex.: seção começando
+    // exatamente em 100vh) reportam isIntersecting=true com ratio 0
+    const io = new IntersectionObserver(
+      entries => {
+        const entry = entries[entries.length - 1]
+        inViewport = entry.isIntersecting && entry.intersectionRatio > 0
+        if (inViewport && !document.hidden) start()
+        else stop()
+      },
+      { threshold: [0, 0.01, 0.1] }
+    )
+    io.observe(canvas)
+
+    const onVisibilityChange = () => {
+      if (!document.hidden && inViewport) start()
+      else stop()
+    }
+    document.addEventListener('visibilitychange', onVisibilityChange)
+
+    start()
 
     return () => {
-      cancelAnimationFrame(rafId)
+      stop()
+      io.disconnect()
+      document.removeEventListener('visibilitychange', onVisibilityChange)
       resizeObserver.disconnect()
       bgTexture.dispose()
       starTexture.dispose()
