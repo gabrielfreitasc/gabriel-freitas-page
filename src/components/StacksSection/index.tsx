@@ -21,7 +21,6 @@ import {
   SiTailwindcss,
   SiTypescript,
 } from 'react-icons/si'
-import { BlackHole } from '../BlackHole'
 import { LaurelWreath } from '../LaurelWreath'
 import { BlockRevealText } from '../ui/BlockRevealText'
 
@@ -221,18 +220,6 @@ export function StacksSection() {
       ref={sectionRef}
       className="w-full min-h-screen flex flex-col items-start justify-start py-12 sm:py-20 px-4 sm:px-8 relative"
     >
-      <BlackHole
-        width="100vw"
-        height="100vh"
-        style={{
-          position: 'absolute',
-          inset: 0,
-          WebkitMaskImage:
-            'linear-gradient(to bottom, transparent 0%, black 18%, black 82%, transparent 100%)',
-          maskImage:
-            'linear-gradient(to bottom, transparent 0%, black 18%, black 82%, transparent 100%)',
-        }}
-      />
       <div className="w-full mb-16">
         <BlockRevealText className="my-5" scrollStart="top 90%">
           <span className="text-4xl sm:text-7xl uppercase font-bold text-white">

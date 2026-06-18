@@ -10,7 +10,7 @@ import LiquidEther from '@/components/ui/LiquidEtherBackground'
 import { gsap } from 'gsap'
 import { ScrollSmoother } from 'gsap/ScrollSmoother'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 gsap.registerPlugin(ScrollSmoother, ScrollTrigger)
 
@@ -20,6 +20,10 @@ const liquidColors = ['#C7C7C7', '#B5B2B3', '#CFCFCF']
 export default function HomeContent() {
   const containerRef = useRef<HTMLDivElement>(null)
   const smootherRef = useRef<ScrollSmoother | null>(null)
+  // O fundo WebGL é caro em GPU. Pausamos sua simulação assim que o hero sai
+  // da tela: nas seções de baixo ele não importa visualmente e devolve todo o
+  // orçamento de frame para a rolagem.
+  const [bgPaused, setBgPaused] = useState(false)
 
   useEffect(() => {
     smootherRef.current = ScrollSmoother.create({
@@ -29,7 +33,15 @@ export default function HomeContent() {
       normalizeScroll: false,
     })
 
+    const bgTrigger = ScrollTrigger.create({
+      trigger: '#hero',
+      start: 'bottom top', // hero totalmente fora de vista
+      onEnter: () => setBgPaused(true),
+      onLeaveBack: () => setBgPaused(false),
+    })
+
     return () => {
+      bgTrigger.kill()
       smootherRef.current?.kill()
     }
   }, [])
@@ -48,7 +60,7 @@ export default function HomeContent() {
           isViscous={false}
           viscous={30}
           iterationsViscous={32}
-          iterationsPoisson={32}
+          iterationsPoisson={14}
           resolution={0.5}
           isBounce={false}
           autoDemo={true}
@@ -57,6 +69,7 @@ export default function HomeContent() {
           takeoverDuration={0.25}
           autoResumeDelay={3000}
           autoRampDuration={0.6}
+          paused={bgPaused}
         />
       </div>
 

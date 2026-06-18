@@ -12,6 +12,12 @@
     "emissionDate": "Outubro 2025"
   },
   {
+    "name": "Claude with Amazon Bedrock - Anthropic",
+    "description": "O curso oficial Claude with Amazon Bedrock, ministrado por especialistas da Anthropic, ensina a integrar e otimizar a família de modelos Claude diretamente pela infraestrutura em nuvem da AWS. O programa abrange desde chamadas básicas de API até a construção de agentes de IA avançados.",
+    "image": "https://cc.sj-cdn.net/certificate/3i2kpf9wzkzfs/certificate-a6jsn478578g-1779298010.jpg?Expires=1781793273&Signature=O5wxUOG63nvF350HsRPbtQPbtACHAS~RCP-yBx4DdJWARGy2Fw~N8WJjb9zPwjlf3rK9tUeOi3QANbtYwsb5mf5cclwCrv9v6brKqUVrWnvMYFSXtqucKjYmKHsTu8~NTj~hGUijg-T41U3Lyng7KHN60dtbYG6EKAt8A4yrUM5VoEWEBjBpxWfhwBsO1hClik4O8nrBPVWZcItLkfAETO~vG3l6AERxaOW~c-xS8I1dmcoP4MTwyBlKtBsrx-SJWgJOPyDU7hx16Zr2NmABP2ckmqtgfeudBpn394XN7CHZAqUJL5WSovNxfmKv75WCSY2I42ericCgAERDprAZuw__&Key-Pair-Id=APKAI3B7HFD2VYJQK4MQ",
+    "emissionDate": "Maio 2026"
+  },
+  {
     "name": "Curso de React.Js e Next.Js (Intermediário e Avançado)",
     "description": "Curso completo de React, Next.js e NestJS voltado para construção de aplicações full-stack modernas. Incluiu desenvolvimento de SPAs com React 19 usando Context API, Reducers, Tailwind CSS e Web Workers, além de aplicações com Next.js 15 utilizando App Router, Server Components, Server Actions e estratégias avançadas de cache. Também abordou criação de APIs REST com NestJS, autenticação com JWT e cookies httpOnly, upload de arquivos, integração front-end/back-end e testes automatizados com Vitest e Playwright. O curso ainda passou por deploy em Vercel e servidores Linux com Nginx e pm2, além de conteúdos complementares de SQL, Linux, HTML, CSS e padrões de projeto.",
     "image": "https://udemy-certificate.s3.amazonaws.com/image/UC-2335dc00-7b2e-4671-84f5-02b5af50bae6.jpg?v=1696813453000",
@@ -22,11 +28,5 @@
     "description": "Formação full-stack em JavaScript e TypeScript cobrindo desde fundamentos da linguagem até construção de aplicações modernas. O curso abordou Node.js, Express, MongoDB, MySQL/MariaDB, criação de APIs REST, autenticação com session e JWT, além de React com Hooks, Redux e Redux-Saga. Também incluiu conceitos de orientação a objetos, princípios SOLID, testes automatizados com Jest, uso de ORMs como Sequelize e Mongoose, configuração de servidores Linux para deploy seguro (SSH e HTTPS) e introdução a NestJS, Strapi e PostgreSQL. Conteúdos extras envolveram HTML5, CSS3, Webpack, Babel, Expressões Regulares e Design Patterns.",
     "image": "https://udemy-certificate.s3.amazonaws.com/image/UC-fa8c3215-370a-4989-b26e-e387bb30f628.jpg?v=1689724720000",
     "emissionDate": "Julho 2023"
-  },
-  {
-    "name": "Descomplicando Docker 2021 - LinuxTips",
-    "description": "Curso completo de Docker 2021, que abordou desde conceitos básicos até deploy de aplicações em produção. O curso incluiu instalação e configuração do Docker Engine, criação de imagens e containers, uso de volumes e networks, além de deploy em servidores Linux com Nginx e pm2. Também abordou técnicas de monitoramento e otimização de performance com Docker Compose e Docker Swarm.",
-    "image": "https://i.postimg.cc/Thcyqf9D/certificate-descomplicando-o-docker-2021-gabriel-freitas-coelho.png",
-    "emissionDate": "Junho 2023"
   }
 ]
