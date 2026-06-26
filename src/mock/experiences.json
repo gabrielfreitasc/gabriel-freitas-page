@@ -66,6 +66,40 @@
     ]
   },
   {
+    "type": "investor",
+    "title": "Painel de relatórios para investidores",
+    "description": "Plataforma de acompanhamento de investimentos em debêntures para investidores da Bioma Investimentos, com relatórios detalhados de rentabilidade, comparativo com CDI e histórico de resgates.",
+    "achievements": [
+      {
+        "title": "Relatório Personalizado",
+        "description": "Cada investidor acessa seu próprio relatório com investimento inicial, rentabilidade acumulada e comparativo com o CDI do período."
+      },
+      {
+        "title": "Comparativo CDI",
+        "description": "Gráfico de linha mensal comparando a rentabilidade da Bioma com o CDI dos últimos 12 meses."
+      },
+      {
+        "title": "Portfólio de Debêntures",
+        "description": "Visão detalhada de todas as debêntures ativas com PU de compra, PU atual e rentabilidade por série."
+      },
+      {
+        "title": "Histórico de Resgates",
+        "description": "Registro completo de debêntures resgatadas com valores brutos, IR, IOF e valor líquido recebido."
+      }
+    ],
+    "techStack": [
+      { "name": "React",        "icon": "SiReact" },
+      { "name": "Next.js",      "icon": "SiNextdotjs" },
+      { "name": "TypeScript",   "icon": "SiTypescript" },
+      { "name": "Tailwind CSS", "icon": "SiTailwindcss" },
+      { "name": "Recharts",     "icon": "FaChartArea" },
+      { "name": "Python",       "icon": "SiPython" },
+      { "name": "FastAPI",      "icon": "SiFastapi" },
+      { "name": "PostgreSQL",   "icon": "SiPostgresql" },
+      { "name": "AWS",          "icon": "FaAws" }
+    ]
+  },
+  {
     "type": "trading",
     "title": "Plataforma de trading de commodities e insumos agrícolas com IA",
     "description": "Automação de processos manuais e com uso de planilhas para gerenciar 80+ Grupos de WhatsApp.",
@@ -84,7 +118,7 @@
       },
       {
         "title": "Notificações e alertas com IA no WhatsApp",
-        "description": "Notificações e alertas com IA no WhatsApp para todo processo de mudança de status da operação, envio de documentos, cancelamentos, análise de contratos e entrou outros."
+        "description": "Notificações e alertas com IA no WhatsApp para todo processo de mudança de status da operação, envio de documentos, cancelamentos, análise de contratos e entrou outros. Utilizando RabbitMQ e SQS para gerenciamento de filas de mensagens."
       },
       {
         "title": "Precificador",
@@ -104,7 +138,9 @@
       { "name": "N8N", "icon": "SiN8n" },
       { "name": "MongoDB", "icon": "SiMongodb" },
       { "name": "Claude", "icon": "SiClaude" },
-      { "name": "Node.js", "icon": "FaNodeJs" }
+      { "name": "Node.js", "icon": "FaNodeJs" },
+      { "name": "RabbitMQ", "icon": "SiRabbitmq" },
+      { "name": "AWS", "icon": "FaAws" }
     ]
   }
 ]
