@@ -1,13 +1,17 @@
 import type { IconType } from 'react-icons'
-import { FaJava, FaNodeJs } from 'react-icons/fa'
+import { FaAws, FaChartArea, FaJava, FaNodeJs } from 'react-icons/fa'
 import {
   SiClaude,
+  SiFastapi,
   SiJavascript,
   SiMapbox,
   SiMongodb,
   SiN8N,
   SiNextdotjs,
   SiOpenai,
+  SiPostgresql,
+  SiPython,
+  SiRabbitmq,
   SiReact,
   SiTailwindcss,
   SiTypescript,
@@ -26,6 +30,12 @@ const iconMap: Record<string, IconType> = {
   SiClaude,
   SiMongodb,
   FaNodeJs,
+  FaAws,
+  FaChartArea,
+  SiFastapi,
+  SiPython,
+  SiPostgresql,
+  SiRabbitmq,
 }
 
 export function getIcon(icon: string | IconType): IconType | null {
