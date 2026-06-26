@@ -100,6 +100,42 @@
     ]
   },
   {
+    "type": "tradingString",
+    "title": "Dashboard operacional de string de commodities",
+    "description": "Painel analítico do fluxo completo de operações de compra e venda de commodities, com visibilidade de margens, impostos, fretes e comissões via integração com ERP.",
+    "achievements": [
+      {
+        "title": "Visão de Margens",
+        "description": "Acompanhamento em tempo real da margem bruta e líquida por período, com drill-down por produto, cliente e fornecedor."
+      },
+      {
+        "title": "Top Parceiros",
+        "description": "Ranking dos top 10 clientes, fornecedores e transportadoras por margem e volume negociado."
+      },
+      {
+        "title": "Mapa Operacional",
+        "description": "Mapa de calor nacional identificando a concentração de operações e margens por região geográfica."
+      },
+      {
+        "title": "Gestão de Impostos",
+        "description": "Controle detalhado de crédito e débito por imposto (ICMS, PIS, COFINS, FUNRURAL etc.) gerado em cada operação."
+      }
+    ],
+    "techStack": [
+      { "name": "React",        "icon": "SiReact" },
+      { "name": "Tailwind CSS", "icon": "SiTailwindcss" },
+      { "name": "Next.js",      "icon": "SiNextdotjs" },
+      { "name": "TypeScript",   "icon": "SiTypescript" },
+      { "name": "OpenAI",       "icon": "SiOpenai" },
+      { "name": "N8N",          "icon": "SiN8n" },
+      { "name": "MongoDB",      "icon": "SiMongodb" },
+      { "name": "Claude",       "icon": "SiClaude" },
+      { "name": "Node.js",      "icon": "FaNodeJs" },
+      { "name": "RabbitMQ",     "icon": "SiRabbitmq" },
+      { "name": "AWS",          "icon": "FaAws" }
+    ]
+  },
+  {
     "type": "trading",
     "title": "Plataforma de trading de commodities e insumos agrícolas com IA",
     "description": "Automação de processos manuais e com uso de planilhas para gerenciar 80+ Grupos de WhatsApp.",
