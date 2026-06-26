@@ -26,11 +26,16 @@ const TradingPlataform = dynamic(
   () => import('./TradingPlataform').then(mod => mod.TradingPlataform),
   { ssr: false, loading: SlidePlaceholder }
 )
+const InvestorPlataform = dynamic(
+  () => import('./InvestorPlataform').then(mod => mod.InvestorPlataform),
+  { ssr: false, loading: SlidePlaceholder }
+)
 
 const slides = [
   { id: 'consultancy', component: ConsultancyPlataform },
-  { id: 'geomap', component: GeoMapPlataform },
-  { id: 'trading', component: TradingPlataform },
+  { id: 'geomap',      component: GeoMapPlataform },
+  { id: 'trading',     component: TradingPlataform },
+  { id: 'investor',    component: InvestorPlataform },
 ]
 
 gsap.registerPlugin(ScrollTrigger)
