@@ -19,23 +19,23 @@ import { ProjectDetailsCard } from '../ProjectDetailsCard'
 
 const chartData = [
   { month: '2025-07', rentBioma: 1.32, cdi: 0.17 },
-  { month: '2025-08', rentBioma: 1.25, cdi: 0.80 },
+  { month: '2025-08', rentBioma: 1.25, cdi: 0.8 },
   { month: '2025-09', rentBioma: 1.35, cdi: 0.79 },
   { month: '2025-10', rentBioma: 1.45, cdi: 1.22 },
-  { month: '2025-11', rentBioma: 1.26, cdi: 1.00 },
+  { month: '2025-11', rentBioma: 1.26, cdi: 1.0 },
   { month: '2025-12', rentBioma: 1.28, cdi: 0.22 },
   { month: '2026-01', rentBioma: 1.35, cdi: 1.11 },
   { month: '2026-02', rentBioma: 1.15, cdi: 0.44 },
   { month: '2026-03', rentBioma: 1.44, cdi: 1.16 },
   { month: '2026-04', rentBioma: 1.29, cdi: 1.04 },
   { month: '2026-05', rentBioma: 1.25, cdi: 1.02 },
-  { month: '2026-06', rentBioma: 1.00, cdi: 0.75 },
+  { month: '2026-06', rentBioma: 1.0, cdi: 0.75 },
 ]
 
 const activeDebentures = [
   {
-    date: '18/10/2023',
-    serie: '2ª Emissão - 39ª Série 100% DI + 2,0% A.A',
+    date: '18/05/2026',
+    serie: '2ª Emissão',
     indexer: '100% DI + X%',
     type: 'Pnz',
     puCompra: 'R$ 5.000,00',
@@ -46,8 +46,8 @@ const activeDebentures = [
     valorAtual: 'R$ 65.519,50',
   },
   {
-    date: '11/09/2023',
-    serie: '2ª Emissão - 39ª Série 100% DI + 2,0% A.A',
+    date: '11/03/2026',
+    serie: '2ª Emissão',
     indexer: '100% DI + X%',
     type: 'Pnz',
     puCompra: 'R$ 5.000,00',
@@ -58,8 +58,8 @@ const activeDebentures = [
     valorAtual: 'R$ 36.929,72',
   },
   {
-    date: '03/06/2024',
-    serie: '2ª Emissão - 01ª Série 100% DI + 2% A.A',
+    date: '03/01/2026',
+    serie: '2ª Emissão',
     indexer: '100% DI + X%',
     type: 'Pnz',
     puCompra: 'R$ 5.000,00',
@@ -92,7 +92,7 @@ const redeemedDebentures = [
 
 const portfolioHistory = [
   {
-    month: '2025-07',
+    month: '2026-04',
     saldoInicial: 'R$ 286.376,34',
     investimento: 'R$ 30.000,00',
     resgate: 'R$ 0,00',
@@ -100,7 +100,7 @@ const portfolioHistory = [
     rendimento: 'R$ 4.189,15',
   },
   {
-    month: '2025-08',
+    month: '2026-03',
     saldoInicial: 'R$ 320.565,49',
     investimento: 'R$ 0,00',
     resgate: 'R$ 5.539,18',
@@ -108,7 +108,7 @@ const portfolioHistory = [
     rendimento: 'R$ 4.406,87',
   },
   {
-    month: '2025-09',
+    month: '2026-02',
     saldoInicial: 'R$ 319.433,18',
     investimento: 'R$ 15.000,00',
     resgate: 'R$ 0,00',
@@ -116,7 +116,7 @@ const portfolioHistory = [
     rendimento: 'R$ 4.734,81',
   },
   {
-    month: '2025-10',
+    month: '2026-01',
     saldoInicial: 'R$ 339.167,99',
     investimento: 'R$ 0,00',
     resgate: 'R$ 11.226,71',
@@ -152,7 +152,8 @@ function CustomTooltip({
     <div className="bg-white border border-gray-200 rounded-lg shadow-lg p-3 text-xs">
       <p className="font-semibold text-gray-700 mb-1">{label}</p>
       <p className="text-gray-600">
-        <span className="font-bold">Rentabilidade Bioma:</span> {bioma.toFixed(2)}%
+        <span className="font-bold">Rentabilidade Bioma:</span>{' '}
+        {bioma.toFixed(2)}%
       </p>
       <p className="text-gray-600">
         <span className="font-bold">Rentabilidade CDI:</span> {cdi.toFixed(2)}%
@@ -169,7 +170,7 @@ function DashboardContent() {
     <div className="p-4 space-y-5 bg-gray-50 min-w-0">
       {/* Header */}
       <h2 className="text-center text-sm font-bold text-teal-700 leading-tight">
-        Relatório - ANTECIPE CONSULTORIA EM CRÉDITO E COBRANÇA LTDA
+        Relatório - Jose da Silva
       </h2>
 
       {/* Summary cards */}
@@ -190,19 +191,17 @@ function DashboardContent() {
       {/* Footnotes */}
       <div className="bg-white border border-gray-200 rounded-lg p-2 text-[8px] text-gray-600 space-y-0.5">
         <p>
-          1. VALORES BRUTOS, SUJEITOS À TABELA REGRESSIVA DE IMPOSTO DE RENDA
-          NO MOMENTO DO RESGATE
+          1. VALORES BRUTOS, SUJEITOS À TABELA REGRESSIVA DE IMPOSTO DE RENDA NO
+          MOMENTO DO RESGATE
         </p>
         <p>
-          2.{' '}
-          <span className="font-bold">Rentabilidade bruta:</span> retorno no
+          2. <span className="font-bold">Rentabilidade bruta:</span> retorno no
           período total dos investimentos
         </p>
         <p>
-          3.{' '}
-          <span className="font-bold">Rentabilidade Anualizada:</span> cálculo
-          equivalente ao período de um ano em relação ao prazo médio transcorrido
-          dos investimentos
+          3. <span className="font-bold">Rentabilidade Anualizada:</span>{' '}
+          cálculo equivalente ao período de um ano em relação ao prazo médio
+          transcorrido dos investimentos
         </p>
       </div>
 
@@ -246,9 +245,7 @@ function DashboardContent() {
               <LabelList
                 dataKey="cdi"
                 position="top"
-                formatter={(v: unknown) =>
-                  `${Number(v).toFixed(2)}%`
-                }
+                formatter={(v: unknown) => `${Number(v).toFixed(2)}%`}
                 style={{ fontSize: '6px', fill: '#f59e0b' }}
               />
             </Line>
@@ -264,9 +261,7 @@ function DashboardContent() {
               <LabelList
                 dataKey="rentBioma"
                 position="top"
-                formatter={(v: unknown) =>
-                  `${Number(v).toFixed(2)}%`
-                }
+                formatter={(v: unknown) => `${Number(v).toFixed(2)}%`}
                 style={{ fontSize: '6px', fill: '#0d9488' }}
               />
             </Line>
@@ -392,7 +387,9 @@ function DashboardContent() {
                 <td className="px-2 py-1 text-center text-gray-700">
                   {row.valorBruto}
                 </td>
-                <td className="px-2 py-1 text-center text-gray-700">{row.ir}</td>
+                <td className="px-2 py-1 text-center text-gray-700">
+                  {row.ir}
+                </td>
                 <td className="px-2 py-1 text-center text-gray-700">
                   {row.iof}
                 </td>
@@ -499,6 +496,13 @@ export function InvestorPlataform() {
 
   return (
     <div className="w-full h-auto flex flex-col sm:flex-row items-center sm:items-start gap-6 sm:gap-2">
+      <ProjectDetailsCard
+        className="!pt-0"
+        title={investorData.title}
+        description={investorData.description}
+        achievements={investorData.achievements}
+        techStack={investorData.techStack}
+      />
       <ExperienceCard direction="right">
         <div
           ref={containerRef}
@@ -509,13 +513,6 @@ export function InvestorPlataform() {
           </div>
         </div>
       </ExperienceCard>
-      <ProjectDetailsCard
-        className="!pt-0"
-        title={investorData.title}
-        description={investorData.description}
-        achievements={investorData.achievements}
-        techStack={investorData.techStack}
-      />
     </div>
   )
 }

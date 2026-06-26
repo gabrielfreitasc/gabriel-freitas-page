@@ -25,35 +25,35 @@ const kpiCards = [
 ]
 
 const supplierData = [
-  { name: 'AGRO CERRADO', value: 380 },
-  { name: 'COOP. PLANALTO', value: 210 },
-  { name: 'FAZ. REUNIDAS', value: 185 },
-  { name: 'GRÃOS BRASIL', value: 140 },
-  { name: 'CAMPO VERDE', value: 95 },
+  { name: 'CERRAMAX AGRO', value: 380 },
+  { name: 'COOPGRÃO VALE', value: 210 },
+  { name: 'TRÊS RIOS SA', value: 185 },
+  { name: 'GRÃOTEX LTDA', value: 140 },
+  { name: 'PALMITAL AGRO', value: 95 },
 ]
 
 const clientData = [
-  { name: 'NUTRILAC SA', value: 540 },
-  { name: 'PROTEÍNA BR', value: 310 },
-  { name: 'EXPORT GRAINS', value: 180 },
-  { name: 'RAÇÃO PREMIUM', value: 120 },
-  { name: 'AGRO GAÚCHA', value: 85 },
+  { name: 'ALIMENTAR SA', value: 540 },
+  { name: 'VITALFEED', value: 310 },
+  { name: 'GREXPORT SA', value: 180 },
+  { name: 'PREMIX NUTRI.', value: 120 },
+  { name: 'PAMPAFEED SA', value: 85 },
 ]
 
 const carrierData = [
-  { name: 'TRANSLOG BR', value: 0.29 },
-  { name: 'CARRETO NAC.', value: 0.27 },
-  { name: 'FRETE RÁPIDO', value: 0.26 },
-  { name: 'LOG. CENTRO', value: 0.25 },
-  { name: 'TRANSP. VALE', value: 0.23 },
+  { name: 'VELOZ CARGAS', value: 0.29 },
+  { name: 'TRANSNORTE', value: 0.27 },
+  { name: 'RAPIDFRET SA', value: 0.26 },
+  { name: 'LOGICENTER', value: 0.25 },
+  { name: 'VALEMAX LOG.', value: 0.23 },
 ]
 
 const brokerData = [
-  { broker: 'MARCOS SILVA CONS.', value: 'R$ 245.320,50' },
-  { broker: 'PATRICIA CORRÊA', value: 'R$ 198.740,00' },
-  { broker: 'J.P. AGRONEGÓCIOS', value: 'R$ 87.550,00' },
-  { broker: 'CARLOS MENEZES ME', value: 'R$ 56.800,00' },
-  { broker: 'AGROPAR CORRET.', value: 'R$ 34.200,00' },
+  { broker: 'AGROPRIME ASSESS.', value: 'R$ 245.320,50' },
+  { broker: 'CERRADO TRADERS', value: 'R$ 198.740,00' },
+  { broker: 'GRAOPRIME NEG.', value: 'R$ 87.550,00' },
+  { broker: 'TERRAMAX CORRET.', value: 'R$ 56.800,00' },
+  { broker: 'FIELDBROKER AGRO', value: 'R$ 34.200,00' },
 ]
 
 const marginData = [
@@ -181,8 +181,8 @@ const notasFiscais = [
   {
     estab: 1,
     produto: 'SOJA GRÃO',
-    fornecedor: 'AGRO CERRADO',
-    cliente: 'NUTRILAC SA',
+    fornecedor: 'CERRAMAX AGRO',
+    cliente: 'ALIMENTAR SA',
     qtdEnt: '38,04 t',
     qtdSai: '38,04 t',
     vlrEnt: 'R$ 26.180,00',
@@ -191,8 +191,8 @@ const notasFiscais = [
   {
     estab: 1,
     produto: 'SOJA GRÃO',
-    fornecedor: 'AGRO CERRADO',
-    cliente: 'PROTEÍNA BR',
+    fornecedor: 'CERRAMAX AGRO',
+    cliente: 'VITALFEED',
     qtdEnt: '34,82 t',
     qtdSai: '34,82 t',
     vlrEnt: 'R$ 23.960,00',
@@ -201,8 +201,8 @@ const notasFiscais = [
   {
     estab: 2,
     produto: 'MILHO EM GRÃO',
-    fornecedor: 'COOP. PLANALTO',
-    cliente: 'RAÇÃO PREMIUM',
+    fornecedor: 'COOPGRÃO VALE',
+    cliente: 'PREMIX NUTRI.',
     qtdEnt: '37,10 t',
     qtdSai: '37,10 t',
     vlrEnt: 'R$ 19.380,00',
@@ -211,8 +211,8 @@ const notasFiscais = [
   {
     estab: 2,
     produto: 'SORGO EM GRÃO',
-    fornecedor: 'FAZ. REUNIDAS',
-    cliente: 'EXPORT GRAINS',
+    fornecedor: 'TRÊS RIOS SA',
+    cliente: 'GREXPORT SA',
     qtdEnt: '37,26 t',
     qtdSai: '37,26 t',
     vlrEnt: 'R$ 15.420,00',
@@ -221,8 +221,8 @@ const notasFiscais = [
   {
     estab: 1,
     produto: 'FARELO SOJA',
-    fornecedor: 'GRÃOS BRASIL',
-    cliente: 'AGRO GAÚCHA',
+    fornecedor: 'GRÃOTEX LTDA',
+    cliente: 'PAMPAFEED SA',
     qtdEnt: '46,82 t',
     qtdSai: '46,82 t',
     vlrEnt: 'R$ 32.580,00',
@@ -231,8 +231,8 @@ const notasFiscais = [
   {
     estab: 2,
     produto: 'CASCA SOJA',
-    fornecedor: 'CAMPO VERDE',
-    cliente: 'NUTRILAC SA',
+    fornecedor: 'PALMITAL AGRO',
+    cliente: 'ALIMENTAR SA',
     qtdEnt: '34,08 t',
     qtdSai: '34,08 t',
     vlrEnt: 'R$ 11.240,00',
@@ -270,7 +270,10 @@ function Top10Chart({
         ))}
       </div>
       <ResponsiveContainer width="100%" height={85}>
-        <BarChart data={data} margin={{ top: 4, right: 4, left: -28, bottom: 20 }}>
+        <BarChart
+          data={data}
+          margin={{ top: 4, right: 4, left: -28, bottom: 20 }}
+        >
           <XAxis
             dataKey="name"
             tick={{ fontSize: 5.5, fill: '#6b7280' }}
@@ -302,83 +305,6 @@ function Top10Chart({
   )
 }
 
-function BrazilHeatMap() {
-  return (
-    <div className="relative w-full h-full flex flex-col">
-      <p className="text-[8px] font-semibold text-gray-700 mb-1">Mapa de Calor</p>
-      <div className="flex gap-1 mb-1">
-        {['Margem Líquida', 'Margem Bruta', 'Operações'].map((t, i) => (
-          <button
-            key={t}
-            className={`text-[6px] px-1 py-0.5 rounded ${
-              i === 2
-                ? 'bg-teal-600 text-white'
-                : 'bg-gray-100 text-gray-500'
-            }`}
-          >
-            {t}
-          </button>
-        ))}
-      </div>
-      <div className="flex-1 relative min-h-0">
-        <svg
-          viewBox="0 0 180 200"
-          className="w-full h-full"
-          preserveAspectRatio="xMidYMid meet"
-        >
-          <defs>
-            <radialGradient id="tsHeat1" cx="50%" cy="50%" r="50%">
-              <stop offset="0%" stopColor="#dc2626" stopOpacity="0.85" />
-              <stop offset="50%" stopColor="#f97316" stopOpacity="0.45" />
-              <stop offset="100%" stopColor="#fbbf24" stopOpacity="0" />
-            </radialGradient>
-            <radialGradient id="tsHeat2" cx="50%" cy="50%" r="50%">
-              <stop offset="0%" stopColor="#f97316" stopOpacity="0.75" />
-              <stop offset="55%" stopColor="#fbbf24" stopOpacity="0.35" />
-              <stop offset="100%" stopColor="#fef08a" stopOpacity="0" />
-            </radialGradient>
-            <radialGradient id="tsHeat3" cx="50%" cy="50%" r="50%">
-              <stop offset="0%" stopColor="#f97316" stopOpacity="0.55" />
-              <stop offset="55%" stopColor="#fbbf24" stopOpacity="0.25" />
-              <stop offset="100%" stopColor="#fef08a" stopOpacity="0" />
-            </radialGradient>
-            <radialGradient id="tsHeat4" cx="50%" cy="50%" r="50%">
-              <stop offset="0%" stopColor="#3b82f6" stopOpacity="0.45" />
-              <stop offset="55%" stopColor="#93c5fd" stopOpacity="0.2" />
-              <stop offset="100%" stopColor="#bfdbfe" stopOpacity="0" />
-            </radialGradient>
-          </defs>
-          {/* Simplified Brazil outline */}
-          <path
-            d="M 50,12 L 38,18 L 28,35 L 20,55 L 22,75 L 45,95 L 60,120 L 75,145 L 80,165 L 95,175 L 108,170 L 112,155 L 118,140 L 130,125 L 140,110 L 148,90 L 145,55 L 130,35 L 100,20 L 55,10 Z"
-            fill="#e5e7eb"
-            stroke="#9ca3af"
-            strokeWidth="1.2"
-          />
-          {/* Heat spots: Centro-Oeste, Sudeste, Sul, Norte */}
-          <ellipse cx="78" cy="105" rx="38" ry="32" fill="url(#tsHeat1)" />
-          <ellipse cx="120" cy="118" rx="26" ry="22" fill="url(#tsHeat2)" />
-          <ellipse cx="108" cy="150" rx="18" ry="15" fill="url(#tsHeat3)" />
-          <ellipse cx="65" cy="55" rx="22" ry="19" fill="url(#tsHeat4)" />
-          {/* Legend */}
-          <circle cx="12" cy="170" r="3" fill="#dc2626" opacity="0.7" />
-          <text x="18" y="173" fontSize="6" fill="#374151">
-            225–300
-          </text>
-          <circle cx="12" cy="180" r="3" fill="#f97316" opacity="0.7" />
-          <text x="18" y="183" fontSize="6" fill="#374151">
-            151–225
-          </text>
-          <circle cx="12" cy="190" r="3" fill="#3b82f6" opacity="0.5" />
-          <text x="18" y="193" fontSize="6" fill="#374151">
-            1–38
-          </text>
-        </svg>
-      </div>
-    </div>
-  )
-}
-
 export function DashboardContent() {
   return (
     <div className="p-3 space-y-3 bg-gray-50 min-w-0">
@@ -393,14 +319,16 @@ export function DashboardContent() {
           </span>
         </div>
         <div className="flex gap-1">
-          {['Resetar layout', 'Sincronizar relatório', 'Exportar Excel'].map(btn => (
-            <button
-              key={btn}
-              className="text-[6px] px-1.5 py-0.5 rounded bg-teal-600 text-white font-medium"
-            >
-              {btn}
-            </button>
-          ))}
+          {['Resetar layout', 'Sincronizar relatório', 'Exportar Excel'].map(
+            btn => (
+              <button
+                key={btn}
+                className="text-[6px] px-1.5 py-0.5 rounded bg-teal-600 text-white font-medium"
+              >
+                {btn}
+              </button>
+            )
+          )}
         </div>
       </div>
 
@@ -520,7 +448,7 @@ export function DashboardContent() {
       </div>
 
       {/* 5. Cost donut + Brazil heat map */}
-      <div className="grid grid-cols-2 gap-2">
+      <div className="col-span-2 w-full flex flex-col items-start gap-2">
         <div className="bg-white border border-gray-200 rounded-lg p-2 shadow-sm">
           <p className="text-[8px] font-semibold text-gray-700 mb-1">
             Composição de Custos
@@ -553,13 +481,6 @@ export function DashboardContent() {
               />
             </PieChart>
           </ResponsiveContainer>
-        </div>
-
-        <div
-          className="bg-white border border-gray-200 rounded-lg p-2 shadow-sm"
-          style={{ minHeight: '160px' }}
-        >
-          <BrazilHeatMap />
         </div>
       </div>
 
