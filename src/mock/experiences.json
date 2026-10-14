@@ -178,5 +178,51 @@
       { "name": "RabbitMQ", "icon": "SiRabbitmq" },
       { "name": "AWS", "icon": "FaAws" }
     ]
+  },
+  {
+    "type": "flyWire",
+    "title": "FlyWire on Minecraft – Simulador de conectoma embarcado no Minecraft",
+    "description": "Simulador neural que roda o conectoma real da Drosophila (FlyWire 783) dentro do Minecraft. Uma abelha do jogo é controlada em tempo real pelos neurônios simulados. Começou com o subcircuito ocelar (625 neurônios, 2.981 sinapses) e hoje tem 10 circuitos sensório-motores.",
+    "achievements": [
+      {
+        "title": "Ingestão validada",
+        "description": "Lê 54,5 milhões de sinapses e 139 mil neurônios anotados do FlyWire 783 e se recusa a rodar se os totais não baterem com o artigo. Confere a proveniência por MD5 e compara o espelho com o primário do Zenodo aresta por aresta."
+      },
+      {
+        "title": "Simulação LIF esparsa",
+        "description": "Rede de neurônios leaky integrate-and-fire com álgebra esparsa (SciPy) e sinal tirado do neurotransmissor (glutamato e GABA inibitórios, ACh excitatório). Roda num processo por circuito, a 0,4 ms/tick, acompanhando o tick do servidor Minecraft."
+      },
+      {
+        "title": "10 circuitos comportamentais",
+        "description": "Os circuitos são fototaxia ocelar, fuga por looming, busca de abrigo na chuva, grooming por toque, órgão de Johnston (som e vento), paladar, termotaxia, feromônio, corte/agressividade e integração de trajetórias. Todos usam neurônios reais do conectoma."
+      },
+      {
+        "title": "Encarnação multissensorial",
+        "description": "Sensores do mundo do Minecraft (luz e dia/noite, chuva, toque, som, calor, comida e feromônio) entram nos neurônios sensoriais. A saída dos neurônios descendentes vira velocidade, guinada e rotação do corpo da abelha a cada tick, sem bloquear o servidor."
+      },
+      {
+        "title": "Experimentos de lesão",
+        "description": "Silencia um grupo de neurônios e sorteia, trial a trial, a condição normal ou lesionada na mesma origem do mundo. Compara as trajetórias com Mann-Whitney, Welch e Kruskal-Wallis, e 7 circuitos já foram confirmados com p < 0,01."
+      },
+      {
+        "title": "Telemetria e visualização",
+        "description": "Grava os disparos (spike trains) num DuckDB por circuito e o conectoma estático em Parquet. Dentro do Minecraft há partículas de atividade neural, HUD ao vivo e comandos de lesão e estimulação."
+      }
+    ],
+    "techStack": [
+      { "name": "Python 3.11", "icon": "SiPython" },
+      { "name": "NumPy", "icon": "SiNumpy" },
+      { "name": "SciPy", "icon": "SiScipy" },
+      { "name": "Pandas", "icon": "SiPandas" },
+      { "name": "PyArrow", "icon": "SiApacheparquet" },
+      { "name": "DuckDB + Parquet", "icon": "SiDuckdb" },
+      { "name": "Java 21", "icon": "FaJava" },
+      { "name": "Paper API 1.21", "icon": "FaCube" },
+      { "name": "Gradle", "icon": "SiGradle" },
+      { "name": "Socket TCP (JSON-lines)", "icon": "TbPlugConnected" },
+      { "name": "Docker", "icon": "SiDocker" },
+      { "name": "pytest", "icon": "SiPytest" },
+      { "name": "ruff", "icon": "SiRuff" }
+    ]
   }
 ]
