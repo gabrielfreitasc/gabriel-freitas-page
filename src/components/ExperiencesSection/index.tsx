@@ -5,6 +5,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import dynamic from 'next/dynamic'
 import { useEffect, useRef } from 'react'
 import { BlockRevealText } from '../ui/BlockRevealText'
+import { BEE_START_ID } from './BeeFlight'
 
 // Placeholder com a mesma altura do ExperienceCard (aspect 714/800) para evitar layout shift
 const SlidePlaceholder = () => (
@@ -37,6 +38,10 @@ const TradingStringOperationalPlataform = dynamic(
     ),
   { ssr: false, loading: SlidePlaceholder },
 )
+const FlyWireOnMinecraft = dynamic(
+  () => import('./FlyWireOnMinecraft').then(mod => mod.FlyWireOnMinecraft),
+  { ssr: false, loading: SlidePlaceholder }
+)
 
 const slides = [
   { id: 'consultancy',   component: ConsultancyPlataform },
@@ -44,6 +49,7 @@ const slides = [
   { id: 'trading',       component: TradingPlataform },
   { id: 'investor',      component: InvestorPlataform },
   { id: 'tradingString', component: TradingStringOperationalPlataform },
+  { id: 'flyWire',       component: FlyWireOnMinecraft },
 ]
 
 gsap.registerPlugin(ScrollTrigger)
@@ -71,7 +77,7 @@ export function ExperiencesSection() {
   return (
     <section className="relative w-full flex flex-col items-start px-4 sm:px-8">
       {/* Title scrolls away naturally — no pin until the card stack is in view */}
-      <div className="w-full py-10 sm:py-16">
+      <div id={BEE_START_ID} className="w-full py-10 sm:py-16">
         <BlockRevealText className="my-5" scrollStart="top 90%">
           <span className="text-4xl sm:text-7xl uppercase font-bold text-white">
             Experiências
@@ -93,6 +99,20 @@ export function ExperiencesSection() {
           </div>
         ))}
       </div>
+
+      {/* Crédito exigido pela licença CC BY 4.0 do modelo 3D da abelha */}
+      <p className="w-full mt-6 text-right text-[10px] text-white/30">
+        Modelo 3D da abelha:{' '}
+        <a
+          href="https://sketchfab.com/3d-models/minecraft-bee-loop-animation-0ad21f462514435ca33c8134449838d2"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="underline hover:text-white/60"
+        >
+          Minecraft Bee - Loop Animation
+        </a>{' '}
+        por vipsz (CC BY 4.0)
+      </p>
     </section>
   )
 }
