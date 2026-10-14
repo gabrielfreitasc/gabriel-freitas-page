@@ -13,6 +13,11 @@ interface TweetCardProps {
   emissionDate: string
   index: number
   disableFloat?: boolean
+  // Controla o flip externamente (true = conteúdo); sem ele o flip é no hover
+  flipped?: boolean
+  // Substitui o posicionamento padrão (absolute centralizado no container)
+  className?: string
+  onClick?: () => void
 }
 
 export const TweetCard = forwardRef<HTMLDivElement, TweetCardProps>(
@@ -25,6 +30,9 @@ export const TweetCard = forwardRef<HTMLDivElement, TweetCardProps>(
       emissionDate,
       index,
       disableFloat,
+      flipped,
+      className = 'absolute top-1/2 left-1/2 -translate-x-1/2',
+      onClick,
     },
     ref
   ) {
@@ -32,7 +40,8 @@ export const TweetCard = forwardRef<HTMLDivElement, TweetCardProps>(
       <div
         ref={ref}
         style={{ animationDelay: `${index * 0.1}s` }}
-        className={`group/card w-[200px] h-[330px] sm:w-[320px] sm:h-[500px] absolute top-1/2 left-1/2 -translate-x-1/2 ${!disableFloat ? 'floating-animation' : ''}`}
+        onClick={onClick}
+        className={`group/card w-[200px] h-[330px] sm:w-[320px] sm:h-[500px] ${className} ${onClick ? 'cursor-pointer' : ''} ${!disableFloat ? 'floating-animation' : ''}`}
       >
         <div
           style={{ perspective: 1000 }}
@@ -40,7 +49,13 @@ export const TweetCard = forwardRef<HTMLDivElement, TweetCardProps>(
         >
           <div
             style={{ transformStyle: 'preserve-3d' }}
-            className="flip-card-inner relative w-full h-full rounded-xl transition-transform duration-500 ease-in-out group-hover/card:rotate-y-180"
+            className={`flip-card-inner relative w-full h-full rounded-xl transition-transform duration-500 ease-in-out ${
+              flipped === undefined
+                ? 'group-hover/card:rotate-y-180'
+                : flipped
+                  ? 'rotate-y-180'
+                  : ''
+            }`}
           >
             {/* Frente: verso ornamentado (visão inicial) */}
             <div
