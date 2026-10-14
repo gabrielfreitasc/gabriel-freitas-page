@@ -66,9 +66,12 @@ const nextConfig = {
         protocol: 'https',
         hostname: 'cc.sj-cdn.net',
       },
+      {
+        protocol: 'https',
+        hostname: 'media.licdn.com',
+      },
     ],
   },
 }
 
 module.exports = nextConfig
-
