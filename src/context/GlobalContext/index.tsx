@@ -1,7 +1,7 @@
 'use client'
 
 import { GlobalContextProps } from './types'
-import React, { createContext, useContext, useEffect } from 'react'
+import React, { createContext, useEffect, useState } from 'react'
 
 const GlobalContext = createContext<GlobalContextProps>(
   {} as GlobalContextProps
@@ -12,6 +12,8 @@ export const GlobalContextProvider = ({
 }: {
   children: React.ReactNode
 }) => {
+  const [isLoading, setIsLoading] = useState(true)
+
   useEffect(() => {
     console.log(
       `%c
@@ -36,7 +38,11 @@ export const GlobalContextProvider = ({
     )
   }, [])
 
-  return <GlobalContext.Provider value={{}}>{children}</GlobalContext.Provider>
+  return (
+    <GlobalContext.Provider value={{ isLoading, setIsLoading }}>
+      {children}
+    </GlobalContext.Provider>
+  )
 }
 
 export default function useGlobalContext(): GlobalContextProps {
