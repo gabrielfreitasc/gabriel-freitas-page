@@ -2,8 +2,9 @@ import gsap from 'gsap'
 import type { SpringOptions } from 'motion/react'
 import { motion, useMotionValue, useSpring } from 'motion/react'
 import { useEffect, useRef, useState } from 'react'
-import { FaAws, FaNodeJs } from 'react-icons/fa'
+import { FaAws, FaJava, FaNodeJs } from 'react-icons/fa'
 import {
+  SiAngular,
   SiClaude,
   SiDocker,
   SiJavascript,
@@ -16,6 +17,7 @@ import {
   SiOpenai,
   SiOracle,
   SiPrisma,
+  SiPython,
   SiReact,
   SiShadcnui,
   SiTailwindcss,
@@ -34,6 +36,7 @@ const stacksIcons = [
   { node: SiReact, title: 'React' },
   { node: SiTailwindcss, title: 'Tailwind CSS' },
   { node: SiNextdotjs, title: 'Next.js' },
+  { node: SiAngular, title: 'Angular' },
   { node: SiTypescript, title: 'TypeScript' },
   { node: SiJavascript, title: 'JavaScript' },
   { node: SiOpenai, title: 'OpenAI' },
@@ -42,6 +45,8 @@ const stacksIcons = [
   { node: SiClaude, title: 'Claude' },
   { node: SiMongodb, title: 'MongoDB' },
   { node: FaNodeJs, title: 'Node.js' },
+  { node: FaJava, title: 'Java' },
+  { node: SiPython, title: 'Python' },
   { node: SiPrisma, title: 'Prisma' },
   { node: SiMysql, title: 'MySQL' },
   { node: FaAws, title: 'AWS' },
