@@ -64,10 +64,13 @@ export interface KnightRainElements {
   // Camada que contém toda a cena (chuva, grama, cavaleiro) e recebe o zoom
   world: HTMLElement
   fig: HTMLElement
-  rain: HTMLElement
-  grass: HTMLElement
-  scarf: HTMLElement
   halo: HTMLElement
+  // Chuva: tela inteira, atrás do cavaleiro (no espaço da tela, com zoom no JS)
+  rainCanvas: HTMLCanvasElement
+  // Cachecol e grama: dentro de `world`, na frente do cavaleiro. Vivem no
+  // espaço do mundo, então o zoom do scroll é feito pelo compositor (CSS).
+  scarfCanvas: HTMLCanvasElement
+  grassCanvas: HTMLCanvasElement
 }
 
 interface Drop {
@@ -110,10 +113,18 @@ export function startKnightRain(
   let frameCost = 4
   let raf = 0
   let lastG = -1
+  let lastB = NaN
+  let lastHalo = ''
   let lastGrass = -1
   // aparelhos fracos começam em ~30fps; os demais só caem para isso se precisar
   const low = getPerfTier() === 'low'
   const baseGap = low ? 32 : 0
+  // intervalo entre ticks da grama; sobe sozinho se o aparelho demora para
+  // desenhá-la e volta ao normal quando sobra folga
+  const GRASS_EVERY = low ? 0.09 : 0.05
+  let grassEvery = GRASS_EVERY
+  let grassCost = 0
+  let grassStart = 0
   let minGap = baseGap
   let gapEma = 16.7
   let prevRaf = 0
@@ -125,13 +136,12 @@ export function startKnightRain(
     scene,
     world,
     fig: figEl,
-    rain: rainEl,
-    grass: grassEl,
-    scarf: scarfEl,
     halo,
+    rainCanvas,
+    scarfCanvas,
+    grassCanvas,
   } = els
-  const pres = [rainEl, figEl, scarfEl, grassEl]
-  pres.forEach(p => (p.textContent = ''))
+  figEl.textContent = ''
 
   // mede a fonte e monta uma grade que cobre o container inteiro
   const probe = document.createElement('span')
@@ -163,12 +173,11 @@ export function startKnightRain(
   const TOP = Math.max(2, ROWS - B - FH)
   const OX = Math.max(0, Math.round((COLS - FW) / 2))
   const CX = OX + FW / 2
-  const FIG = FIG0.map(l => ' '.repeat(OX) + l)
+  const LEAD = ' '.repeat(OX)
+  const FIG = FIG0.map(l => LEAD + l)
 
-  pres.forEach(p => {
-    p.style.fontSize = fs.toFixed(2) + 'px'
-    p.style.lineHeight = lh.toFixed(3) + 'px'
-  })
+  figEl.style.fontSize = fs.toFixed(2) + 'px'
+  figEl.style.lineHeight = lh.toFixed(3) + 'px'
   figEl.style.top = (TOP * lh).toFixed(2) + 'px'
   const worldW = COLS * cw
   const worldH = ROWS * lh
@@ -227,47 +236,92 @@ export function startKnightRain(
       (rnd() - 0.5) * 1.4
     edge[x] = Math.round(GBASE + e)
   }
-  const gChar: string[] = new Array(N).fill(' ')
+  const gChar = new Uint8Array(N) // códigos ASCII; só vale onde gCls != 0
   const gCls = new Uint8Array(N) // 0 = vazio
-  const CLS = ['', 'g0', 'g1', 'g2', 'g3', 'g4', 'gt']
 
-  function updateGrass(t: number) {
-    gChar.fill(' ')
+  // Tabelas: a grama calculava 3 sin + 1 pow por célula a cada tick (~25 mil
+  // células). As ondas viram produtos de senos por coluna e por linha
+  // (sin(a+b) = sin a cos b + cos a sin b) e o pow vira consulta.
+  const POW_N = 1024
+  const POW07 = new Float32Array(POW_N + 1)
+  for (let k = 0; k <= POW_N; k++) POW07[k] = Math.pow(k / POW_N, 0.7)
+  const sinY = new Float32Array(ROWS)
+  const cosY = new Float32Array(ROWS)
+  for (let y = 0; y < ROWS; y++) {
+    sinY[y] = Math.sin(y * 0.21)
+    cosY[y] = Math.cos(y * 0.21)
+  }
+  const sa1 = new Float32Array(COLS)
+  const ca1 = new Float32Array(COLS)
+  const sa2 = new Float32Array(COLS)
+  const ca2 = new Float32Array(COLS)
+  const sinC = new Float32Array(ROWS)
+  const cosC = new Float32Array(ROWS)
+  const CH_SLASH = 47
+  const CH_BACK = 92
+  const CH_BAR = 124
+  const CH_APOS = 39
+  const CH_DOT = 46
+  let minEdge0 = ROWS
+  for (let x = 0; x < COLS; x++) if (edge[x] < minEdge0) minEdge0 = edge[x]
+  // faixa de colunas simulada no último tick
+  let simX0 = 1
+  let simX1 = 0
+
+  function updateGrass(t: number, x0: number, x1: number) {
+    simX0 = x0
+    simX1 = x1
     gCls.fill(0)
-    for (let x = 0; x < COLS; x++) {
+    for (let x = x0; x < x1; x++) {
+      const a1 = x * 0.065 - t * 1.25
+      sa1[x] = Math.sin(a1)
+      ca1[x] = Math.cos(a1)
+      const a2 = x * 0.14 - t * 2.05
+      sa2[x] = Math.sin(a2)
+      ca2[x] = Math.cos(a2)
+    }
+    for (let y = Math.max(0, minEdge0 - 5); y < ROWS; y++) {
+      const c = 0.9 * Math.sin(y * 0.17 + t * 0.3)
+      sinC[y] = Math.sin(c)
+      cosC[y] = Math.cos(c)
+    }
+    for (let x = x0; x < x1; x++) {
       const top = edge[x]
       const span = ROWS - top
+      const idxScale = POW_N / span
       // sementes / pontinhos acima da borda
       for (let y = top - 4; y < top; y++) {
         if (y < 0) continue
         const i = y * COLS + x
-        if (hA[i] < 0.035 && !occ(x, y)) {
-          gChar[i] = hB[i] < 0.5 ? '.' : "'"
+        if (hA[i] < 0.035 && mask[i] !== 1) {
+          gChar[i] = hB[i] < 0.5 ? CH_DOT : CH_APOS
           gCls[i] = hB[i] < 0.3 ? 5 : 4
         }
       }
+      const s1 = sa1[x]
+      const c1 = ca1[x]
+      const s2 = sa2[x]
+      const c2 = ca2[x]
       for (let y = Math.max(0, top); y < ROWS; y++) {
         const i = y * COLS + x
-        const d = (y - top + 1) / span
+        const k = y - top + 1
         // rajadas de vento correndo para a direita
-        const g1 =
-          0.5 +
-          0.5 *
-            Math.sin(x * 0.065 - t * 1.25 + 0.9 * Math.sin(y * 0.17 + t * 0.3))
-        const g2 = 0.5 + 0.5 * Math.sin(x * 0.14 + y * 0.21 - t * 2.05)
+        const g1 = 0.5 + 0.5 * (s1 * cosC[y] + c1 * sinC[y])
+        const g2 = 0.5 + 0.5 * (s2 * cosY[y] + c2 * sinY[y])
         const g = 0.65 * g1 + 0.35 * g2
-        let p = (0.14 + 0.72 * Math.pow(d, 0.7)) * (0.82 + 0.36 * (g - 0.5))
-        if (occ(x, y)) p *= 0.72
+        let p =
+          (0.14 + 0.72 * POW07[(k * idxScale) | 0]) * (0.82 + 0.36 * (g - 0.5))
+        if (mask[i] === 1) p *= 0.72
         if (hA[i] > p) continue
         const lean = 0.3 + 0.6 * g + (hB[i] - 0.5) * 0.5
-        let ch = lean > 0.5 ? '/' : lean < 0.06 ? '\\' : '|'
-        if (y === top && hB[i] < 0.25) ch = "'"
+        let ch = lean > 0.5 ? CH_SLASH : lean < 0.06 ? CH_BACK : CH_BAR
+        if (y === top && hB[i] < 0.25) ch = CH_APOS
         gChar[i] = ch
         if (hB[i] > 0.93) {
           gCls[i] = 6
           continue
         }
-        const v = 0.55 * g + 0.45 * hB[i] - 0.15 * d
+        const v = 0.55 * g + 0.45 * hB[i] - 0.15 * (k / span)
         gCls[i] = v < 0.22 ? 1 : v < 0.42 ? 2 : v < 0.6 ? 3 : v < 0.76 ? 4 : 5
       }
     }
@@ -295,30 +349,27 @@ export function startKnightRain(
       drops.push(reset({ li, vy: 0, len: 0, y: 0, x: 0, depth: 0 }, true))
   })
   const splashes: Splash[] = []
-  const rChar: string[] = new Array(N).fill(' ')
+  const rChar = new Uint8Array(N)
   const rCls = new Uint8Array(N)
-  const RCLS = ['', 'r1', 'r2', 'r3', 'rs']
 
   // vento: inclinação base com rajadas
   const windAt = (t: number) =>
     0.75 + 0.22 * Math.sin(t * 0.45) + 0.12 * Math.sin(t * 1.3 + 1.7)
 
   // ---------- cachecol (declarado antes da chuva usar sCls) ----------
-  const sChar: string[] = new Array(N).fill(' ')
+  const sChar = new Uint8Array(N)
   const sCls = new Uint8Array(N)
-  const SCLS = ['', 's1', 's2', 's3', 's4', 's5']
 
   function put(x: number, y: number, ch: string, c: number) {
     if (x < 0 || x >= COLS || y < 0 || y >= ROWS) return
     const i = y * COLS + x
     if (mask[i] || gCls[i] || sCls[i]) return // atrás do cavaleiro e da grama
     if (rCls[i] >= c && c !== 4) return
-    rChar[i] = ch
+    rChar[i] = ch.charCodeAt(0)
     rCls[i] = c
   }
 
   function updateRain(t: number, dt: number) {
-    rChar.fill(' ')
     rCls.fill(0)
     const w = windAt(t)
     const ch = w > 0.5 ? '\\' : '|'
@@ -396,10 +447,11 @@ export function startKnightRain(
     const lvl = Math.max(1, Math.min(5, 1 + Math.floor(shade * 5)))
     if (sCls[i] && sCls[i] >= lvl) return
     const h = hA[(i + salt) % N]
-    sChar[i] =
+    sChar[i] = (
       edgeT > 0.78
         ? EDGE[Math.floor(h * EDGE.length)]
         : DENSE[Math.floor(h * DENSE.length)]
+    ).charCodeAt(0)
     sCls[i] = lvl
   }
 
@@ -618,7 +670,6 @@ export function startKnightRain(
     }
   }
   function updateScarf(t: number, dt: number, wind: number) {
-    sChar.fill(' ')
     sCls.fill(0)
     TAILS.forEach((T, i) => drawTail(T, i, t, wind, dt))
     drawFrags(dt)
@@ -626,83 +677,244 @@ export function startKnightRain(
     drawKnot(t)
   }
 
-  // Janela visível da grade. A grade é maior que a tela (para cobrir o zoom
-  // mínimo), mas só as células que aparecem no zoom atual viram HTML — sem isso
-  // o custo por frame seria o da grade inteira mesmo sem zoom.
+  // ---------- renderização em canvas ----------
+  // Chuva, grama e cachecol saem em <canvas> com sprites pré-renderizados por
+  // (caractere, cor): reescrever dezenas de milhares de caracteres de texto no
+  // DOM a cada frame era o que travava a rolagem do hero.
+  const dpr = Math.min(window.devicePixelRatio || 1, low ? 1 : 1.5)
+  const fontFamily =
+    getComputedStyle(scene).getPropertyValue('--knight-font').trim() ||
+    'monospace'
+
+  interface GlyphStyle {
+    color: string
+    weight: number
+    glow?: [number, string]
+  }
+  const plain = (color: string, weight = 700): GlyphStyle => ({ color, weight })
+  const RAIN_STYLES: (GlyphStyle | null)[] = [
+    null,
+    plain('rgba(170,190,225,.28)', 400),
+    {
+      color: 'rgba(195,214,245,.5)',
+      weight: 400,
+      glow: [3, 'rgba(195,214,245,.25)'],
+    },
+    {
+      color: 'rgba(225,236,255,.8)',
+      weight: 400,
+      glow: [5, 'rgba(215,230,255,.45)'],
+    },
+    {
+      color: 'rgba(230,240,255,.75)',
+      weight: 400,
+      glow: [4, 'rgba(230,240,255,.5)'],
+    },
+  ]
+  const GRASS_STYLES: (GlyphStyle | null)[] = [
+    null,
+    plain('#2c4630'),
+    plain('#43613d'),
+    plain('#66703f'),
+    plain('#96944f'),
+    { color: '#c2bb6a', weight: 700, glow: [4, 'rgba(194,187,106,.5)'] },
+    plain('#4c7870'),
+  ]
+  const SCARF_GLOW: [number, string] = [3, 'rgba(200,20,30,.35)']
+  const SCARF_STYLES: (GlyphStyle | null)[] = [
+    null,
+    { color: '#560a12', weight: 700, glow: SCARF_GLOW },
+    { color: '#780f17', weight: 700, glow: SCARF_GLOW },
+    { color: '#98141b', weight: 700, glow: SCARF_GLOW },
+    { color: '#b51b20', weight: 700, glow: SCARF_GLOW },
+    { color: '#d02a2b', weight: 700, glow: [5, 'rgba(230,50,50,.45)'] },
+  ]
+  const STYLE_SETS = [RAIN_STYLES, GRASS_STYLES, SCARF_STYLES]
+  const RAIN = 0
+  const GRASS = 1
+  const SCARF = 2
+
+  const PAD = 8 // margem do sprite para o brilho não ser cortado
+  const spriteW = Math.ceil((cw + 2 * PAD) * dpr)
+  const spriteH = Math.ceil((lh + 2 * PAD) * dpr)
+  const drawW = spriteW / dpr
+  const drawH = spriteH / dpr
+  // linha de base do texto: centralizada na altura da linha, como o DOM faz
+  const baseline = (() => {
+    const c = document.createElement('canvas').getContext('2d')!
+    c.font = `700 ${fs}px ${fontFamily}`
+    const m = c.measureText('M')
+    const asc = m.fontBoundingBoxAscent ?? 1.02 * fs
+    const desc = m.fontBoundingBoxDescent ?? 0.3 * fs
+    return lh / 2 + (asc - desc) / 2
+  })()
+
+  // Sprites por (conjunto, cor, caractere, nível de zoom). O zoom é quantizado
+  // em QMAX passos: a chuva usa sprites já no tamanho do zoom atual, o que
+  // permite copiá-los sem redimensionar (caminho rápido do drawImage).
+  const QMAX = 20
+  const sprites = new Map<number, HTMLCanvasElement>()
+  function sprite(set: number, cls: number, code: number, qk = QMAX) {
+    const key = (qk << 24) | (set << 16) | (cls << 8) | code
+    let cv = sprites.get(key)
+    if (cv) return cv
+    const q = qk / QMAX
+    const st = STYLE_SETS[set][cls]!
+    cv = document.createElement('canvas')
+    cv.width = Math.max(1, Math.ceil(spriteW * q))
+    cv.height = Math.max(1, Math.ceil(spriteH * q))
+    const c = cv.getContext('2d')!
+    c.scale(dpr * q, dpr * q)
+    c.font = `${st.weight} ${fs}px ${fontFamily}`
+    c.textBaseline = 'alphabetic'
+    c.fillStyle = st.color
+    if (st.glow) {
+      c.shadowBlur = st.glow[0] * dpr * q
+      c.shadowColor = st.glow[1]
+    }
+    c.fillText(String.fromCharCode(code), PAD, PAD + baseline)
+    sprites.set(key, cv)
+    return cv
+  }
+  // Gera de antemão os sprites do tamanho normal: criar sprite no meio da
+  // animação (fillText com brilho) causava travadas pontuais.
+  const WARM: [number, string][] = [
+    [RAIN, "\\|'`o."],
+    [GRASS, ".'/\\|"],
+    [SCARF, '&8%$@xX+;'],
+  ]
+  for (const [set, chars] of WARM)
+    for (let cls = 1; cls < STYLE_SETS[set].length; cls++)
+      for (const ch of chars) sprite(set, cls, ch.charCodeAt(0))
+
+  // chuva: canvas do tamanho da tela; o zoom é aplicado na transformação
+  rainCanvas.width = Math.round(vw * dpr)
+  rainCanvas.height = Math.round(vh * dpr)
+  const rctx = rainCanvas.getContext('2d')!
+
+  // canvas no espaço do mundo (cachecol/grama): cobre só a região necessária
+  function setupWorldCanvas(
+    cv: HTMLCanvasElement,
+    c0: number,
+    c1: number,
+    r0: number,
+    r1: number
+  ) {
+    cv.style.left = (c0 * cw).toFixed(1) + 'px'
+    cv.style.top = (r0 * lh).toFixed(2) + 'px'
+    cv.style.width = ((c1 - c0) * cw).toFixed(1) + 'px'
+    cv.style.height = ((r1 - r0) * lh).toFixed(2) + 'px'
+    cv.width = Math.ceil((c1 - c0) * cw * dpr)
+    cv.height = Math.ceil((r1 - r0) * lh * dpr)
+    return cv.getContext('2d')!
+  }
+  // cachecol: do capacete até a ponta mais longa das fitas e fragmentos
+  const SC0 = Math.max(0, OX - 6)
+  const SC1 = Math.min(COLS, OX + FW + 44)
+  const SR0 = Math.max(0, TOP - 12)
+  const SR1 = Math.min(ROWS, TOP + 40)
+  const sctx = setupWorldCanvas(scarfCanvas, SC0, SC1, SR0, SR1)
+  // grama: da borda superior mais alta até o chão, na largura inteira
+  const GR0 = Math.max(0, minEdge0 - 6)
+  const gctx = setupWorldCanvas(grassCanvas, 0, COLS, GR0, ROWS)
+
+  // Zoom atual, escrito pelo hero em data-attributes (mudar variável CSS no
+  // elemento raiz invalidaria o estilo de todos os descendentes)
+  let curScale = 1
+  let curDrop = 0
+  let worldKey = ''
+  function readZoom() {
+    const sc = parseFloat(scene.dataset.knightScale || '')
+    const dr = parseFloat(scene.dataset.knightDrop || '')
+    const ns = Number.isFinite(sc) ? Math.min(1, Math.max(minScale, sc)) : 1
+    const nd = Number.isFinite(dr) ? Math.max(0, dr) : 0
+    const changed = ns !== curScale || nd !== curDrop
+    curScale = ns
+    curDrop = nd
+    return changed
+  }
+  function applyWorldTransform() {
+    const key = curScale + ',' + curDrop
+    if (key === worldKey) return
+    worldKey = key
+    world.style.transform =
+      'translateY(' + curDrop.toFixed(2) + 'px) scale(' + curScale + ')'
+  }
+
+  // Janela visível da grade no zoom atual: a grade é maior que a tela (para
+  // cobrir o zoom mínimo), mas só essa parte precisa ser desenhada.
   const WIN_MARGIN = 8
   let wx0 = 0
   let wx1 = COLS
   let wy0 = 0
   function updateWindow() {
-    const s = Math.min(
-      1,
-      Math.max(
-        minScale,
-        parseFloat(scene.style.getPropertyValue('--knight-scale')) || 1
-      )
-    )
-    const drop = Math.max(
-      0,
-      parseFloat(scene.style.getPropertyValue('--knight-y')) || 0
-    )
-    const visCols = Math.ceil(vw / s / cw) + 2 * WIN_MARGIN
+    const visCols = Math.ceil(vw / curScale / cw) + 2 * WIN_MARGIN
     wx0 = Math.max(0, Math.floor((COLS - visCols) / 2))
     wx1 = COLS - wx0
-    wy0 = Math.max(0, ROWS - Math.ceil((vh + drop) / s / lh) - WIN_MARGIN)
-  }
-  // posiciona um <pre> da grade na janela atual (só mexe no DOM se mudou)
-  const placed = new Map<HTMLElement, string>()
-  function place(el: HTMLElement, y0: number) {
-    const key = wx0 + ',' + y0
-    if (placed.get(el) === key) return
-    placed.set(el, key)
-    el.style.left = (wx0 * cw).toFixed(1) + 'px'
-    el.style.top = (y0 * lh).toFixed(2) + 'px'
+    wy0 = Math.max(
+      0,
+      ROWS - Math.ceil((vh + curDrop) / curScale / lh) - WIN_MARGIN
+    )
   }
 
-  // linhas de y0 até o fim, só de wx0..wx1 e sem espaços sobrando no fim
-  function toHTML(
-    chars: string[],
-    cls: Uint8Array,
-    names: string[],
-    y0: number
-  ) {
-    const out: string[] = []
-    for (let y = y0; y < ROWS; y++) {
+  // Os sprites são copiados em coordenadas inteiras do dispositivo, sem
+  // redimensionar (exceto a chuva enquanto há zoom): é o caminho mais rápido
+  // do drawImage, tanto na GPU quanto no raster em CPU.
+  function drawRain() {
+    rctx.clearRect(0, 0, rainCanvas.width, rainCanvas.height)
+    const sc = curScale
+    const ox = vw / 2 - (worldW / 2) * sc
+    const oy = vh + curDrop - worldH * sc
+    const qk = Math.max(1, Math.round(sc * QMAX))
+    for (let y = wy0; y < ROWS; y++) {
       const base = y * COLS
-      let first = -1
-      let lastX = -1
-      for (let x = wx0; x < wx1; x++)
-        if (cls[base + x]) {
-          if (first < 0) first = x
-          lastX = x
-        }
-      if (first < 0) {
-        out.push('')
-        continue
+      const sy = Math.round((oy + (y * lh - PAD) * sc) * dpr)
+      for (let x = wx0; x < wx1; x++) {
+        const c = rCls[base + x]
+        if (!c) continue
+        const sx = Math.round((ox + (x * cw - PAD) * sc) * dpr)
+        rctx.drawImage(sprite(RAIN, c, rChar[base + x], qk), sx, sy)
       }
-      let line = ' '.repeat(first - wx0)
-      let cur = -1
-      let buf = ''
-      for (let x = first; x <= lastX; x++) {
-        const i = base + x
-        const c = cls[i]
-        if (c !== cur) {
-          if (buf)
-            line +=
-              cur > 0
-                ? '<span class="' + names[cur] + '">' + buf + '</span>'
-                : buf
-          buf = ''
-          cur = c
-        }
-        buf += c ? chars[i] : ' '
-      }
-      if (buf && cur > 0)
-        line += '<span class="' + names[cur] + '">' + buf + '</span>'
-      out.push(line)
     }
-    return out.join('\n')
+  }
+
+  function drawScarf() {
+    sctx.clearRect(0, 0, scarfCanvas.width, scarfCanvas.height)
+    const ox = SC0 * cw + PAD
+    const oy = SR0 * lh + PAD
+    for (let y = SR0; y < SR1; y++) {
+      const base = y * COLS
+      const dy = Math.round((y * lh - oy + dyRow[y]) * dpr)
+      for (let x = SC0; x < SC1; x++) {
+        const c = sCls[base + x]
+        if (c)
+          sctx.drawImage(
+            sprite(SCARF, c, sChar[base + x]),
+            Math.round((x * cw - ox) * dpr),
+            dy
+          )
+      }
+    }
+  }
+
+  // A grama é redesenhada só quando a simulação dela roda (tick ou zoom que
+  // revela colunas novas); entre um tick e outro o canvas fica como está.
+  function drawGrass() {
+    gctx.clearRect(0, 0, grassCanvas.width, grassCanvas.height)
+    const oy = GR0 * lh + PAD
+    for (let y = GR0; y < ROWS; y++) {
+      const base = y * COLS
+      const dy = Math.round((y * lh - oy) * dpr)
+      for (let x = simX0; x < simX1; x++) {
+        const c = gCls[base + x]
+        if (c)
+          gctx.drawImage(
+            sprite(GRASS, c, gChar[base + x]),
+            Math.round((x * cw - PAD) * dpr),
+            dy
+          )
+      }
+    }
   }
 
   // respiração forte
@@ -742,13 +954,15 @@ export function startKnightRain(
         gapEma = 16.7
       }
     } else fastCount = 0
-    // janela grande (zoom afastado) = muito mais HTML por frame: 30fps basta
-    const heavy = (wx1 - wx0) * (ROWS - wy0) > 45000
-    if (!reduce && now - last < (heavy ? Math.max(minGap, 32) : minGap)) {
+    // enquanto o zoom do scroll muda, não pula frames (o cavaleiro e o canvas
+    // precisam andar juntos)
+    const zoomChanged = readZoom()
+    if (!reduce && !zoomChanged && now - last < minGap) {
       raf = requestAnimationFrame(frame)
       return
     }
     const frameStart = performance.now()
+    applyWorldTransform()
     updateWindow()
     const t = (now - t0) / 1000
     const dt = Math.min(0.05, (now - last) / 1000)
@@ -756,26 +970,42 @@ export function startKnightRain(
 
     const b = reduce ? 0 : breath(t)
     const A = lh * 0.85
-    for (let i = 0; i < FH; i++) {
-      const k = i / (FH - 1)
-      const w = Math.max(0, (0.9 - k) / 0.9)
-      const y = -b * A * Math.pow(w, 1.15)
-      const sx = 1 + b * 0.02 * Math.exp(-Math.pow((k - 0.4) / 0.22, 2))
-      rows[i].style.transform =
-        'translateY(' + y.toFixed(2) + 'px) scaleX(' + sx.toFixed(4) + ')'
-      dyRow[TOP + i] = y
+    if (b !== lastB)
+      for (let i = 0; i < FH; i++) {
+        const k = i / (FH - 1)
+        const w = Math.max(0, (0.9 - k) / 0.9)
+        const y = -b * A * Math.pow(w, 1.15)
+        const sx = 1 + b * 0.02 * Math.exp(-Math.pow((k - 0.4) / 0.22, 2))
+        rows[i].style.transform =
+          'translateY(' + y.toFixed(2) + 'px) scaleX(' + sx.toFixed(4) + ')'
+        dyRow[TOP + i] = y
+      }
+    if (b !== lastB) {
+      for (let y = 0; y < TOP; y++) dyRow[y] = dyRow[TOP]
+      lastB = b
     }
-    for (let y = 0; y < TOP; y++) dyRow[y] = dyRow[TOP]
     const gq = Math.round(b * 8) / 8
     if (gq !== lastG) {
       figEl.style.setProperty('--g', String(gq))
       lastG = gq
     }
-    halo.style.opacity = (0.75 + 0.25 * b).toFixed(3)
+    const haloOpacity = (0.75 + 0.25 * b).toFixed(2)
+    if (haloOpacity !== lastHalo) {
+      halo.style.opacity = haloOpacity
+      lastHalo = haloOpacity
+    }
 
-    const grassTick = reduce || t - lastGrass > (low ? 0.09 : 0.045)
+    // simula/desenha a grama no tick dela ou quando o zoom ultrapassa as
+    // colunas já simuladas
+    const grassTick =
+      reduce || t - lastGrass > grassEvery || wx0 < simX0 || wx1 > simX1
     if (grassTick) {
-      updateGrass(reduce ? 0 : t)
+      grassStart = performance.now()
+      updateGrass(
+        reduce ? 0 : t,
+        Math.max(0, wx0 - 32),
+        Math.min(COLS, wx1 + 32)
+      )
       lastGrass = t
     }
     updateScarf(reduce ? 0 : t, reduce ? 0 : dt, windAt(reduce ? 0 : t))
@@ -784,45 +1014,32 @@ export function startKnightRain(
       const y = TOP + i
       const src = FIG[i]
       let hit = false
-      for (let x = 0, j = y * COLS; x < src.length; x++, j++)
+      for (let x = OX, j = y * COLS + OX; x < src.length; x++, j++)
         if (gCls[j] || sCls[j]) {
           hit = true
           break
         }
       if (!hit && !dirty[i]) continue
       dirty[i] = hit ? 1 : 0
-      let s = ''
-      for (let x = 0; x < src.length; x++) {
+      let s = LEAD
+      for (let x = OX; x < src.length; x++) {
         const j = y * COLS + x
         s += gCls[j] || sCls[j] ? ' ' : src[x]
       }
       if (rows[i].textContent !== s) rows[i].textContent = s
     }
-    {
-      const html = toHTML(sChar, sCls, SCLS, wy0).split('\n')
-      let out = ''
-      for (let y = wy0; y < ROWS; y++)
-        out +=
-          '<span class="sr" style="transform:translateY(' +
-          dyRow[y].toFixed(2) +
-          'px)">' +
-          (html[y - wy0] || ' ') +
-          '</span>'
-      place(scarfEl, wy0)
-      scarfEl.innerHTML = out
-    }
+    drawScarf()
     if (grassTick) {
-      place(grassEl, wy0)
-      grassEl.innerHTML = toHTML(gChar, gCls, CLS, wy0)
+      drawGrass()
+      grassCost = grassCost * 0.7 + (performance.now() - grassStart) * 0.3
+      if (grassCost > 6) grassEvery = Math.min(0.14, grassEvery * 1.15)
+      else if (grassCost < 3)
+        grassEvery = Math.max(GRASS_EVERY, grassEvery * 0.92)
     }
 
     if (!reduce) updateRain(t, dt)
-    else {
-      rChar.fill(' ')
-      rCls.fill(0)
-    }
-    place(rainEl, wy0)
-    rainEl.innerHTML = toHTML(rChar, rCls, RCLS, wy0)
+    else rCls.fill(0)
+    drawRain()
 
     frameCost = frameCost * 0.9 + (performance.now() - frameStart) * 0.1
     if (!reduce) raf = requestAnimationFrame(frame)

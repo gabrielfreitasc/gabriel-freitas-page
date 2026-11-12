@@ -3,9 +3,10 @@
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import dynamic from 'next/dynamic'
-import { useEffect, useRef } from 'react'
+import { type ReactNode, useEffect, useRef, useState } from 'react'
 import { BlockRevealText } from '../ui/BlockRevealText'
 import { BEE_START_ID } from './BeeFlight'
+import { LaurelWreath } from '../LaurelWreath'
 
 // Placeholder com a mesma altura do ExperienceCard (aspect 714/800) para evitar layout shift
 const SlidePlaceholder = () => (
@@ -34,23 +35,59 @@ const InvestorPlataform = dynamic(
 const TradingStringOperationalPlataform = dynamic(
   () =>
     import('./TradingStringOperationalPlataform').then(
-      mod => mod.TradingStringOperationalPlataform,
+      mod => mod.TradingStringOperationalPlataform
     ),
-  { ssr: false, loading: SlidePlaceholder },
+  { ssr: false, loading: SlidePlaceholder }
 )
 const FlyWireOnMinecraft = dynamic(
   () => import('./FlyWireOnMinecraft').then(mod => mod.FlyWireOnMinecraft),
   { ssr: false, loading: SlidePlaceholder }
 )
 
+// lazy: só monta (e baixa o chunk: recharts, leaflet, moment…) quando o slide
+// chega perto da tela. O FlyWire fica de fora: o BeeFlight mora nele e precisa
+// existir desde o título da seção.
 const slides = [
-  { id: 'consultancy',   component: ConsultancyPlataform },
-  { id: 'geomap',        component: GeoMapPlataform },
-  { id: 'trading',       component: TradingPlataform },
-  { id: 'investor',      component: InvestorPlataform },
-  { id: 'tradingString', component: TradingStringOperationalPlataform },
-  { id: 'flyWire',       component: FlyWireOnMinecraft },
+  { id: 'consultancy', component: ConsultancyPlataform, lazy: true },
+  { id: 'geomap', component: GeoMapPlataform, lazy: true },
+  { id: 'trading', component: TradingPlataform, lazy: true },
+  { id: 'investor', component: InvestorPlataform, lazy: true },
+  {
+    id: 'tradingString',
+    component: TradingStringOperationalPlataform,
+    lazy: true,
+  },
+  { id: 'flyWire', component: FlyWireOnMinecraft, lazy: false },
 ]
+
+// Monta o conteúdo na primeira vez que o slide chega a 1,5 telas de distância
+// e o mantém montado depois. Montar tudo no carregamento custava JS (gráficos,
+// mapa, medições de layout) justo enquanto o usuário está no hero.
+function LazySlide({ children }: { children: ReactNode }) {
+  const ref = useRef<HTMLDivElement>(null)
+  const [show, setShow] = useState(false)
+
+  useEffect(() => {
+    const el = ref.current
+    if (!el) return
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry.isIntersecting) return
+        setShow(true)
+        io.disconnect()
+      },
+      { rootMargin: '150% 0px' }
+    )
+    io.observe(el)
+    return () => io.disconnect()
+  }, [])
+
+  return (
+    <div ref={ref} className="w-full h-full">
+      {show ? children : <SlidePlaceholder />}
+    </div>
+  )
+}
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -90,12 +127,18 @@ export function ExperiencesSection() {
         ref={stackRef}
         className="relative w-full min-h-screen flex flex-col gap-16 sm:gap-32"
       >
-        {slides.map(({ id, component: Component }) => (
+        {slides.map(({ id, component: Component, lazy }) => (
           <div
             key={id}
             className="w-full h-full relative odd:left-0 even:right-0 sm:odd:left-[-2.5%] sm:even:right-[-2.5%]"
           >
-            <Component />
+            {lazy ? (
+              <LazySlide>
+                <Component />
+              </LazySlide>
+            ) : (
+              <Component />
+            )}
           </div>
         ))}
       </div>
@@ -113,6 +156,10 @@ export function ExperiencesSection() {
         </a>{' '}
         por vipsz (CC BY 4.0)
       </p>
+
+        <div className="flex items-center justify-center absolute right-0 left-0 bottom-0">
+          <LaurelWreath containerStyle="!size-[20%] sm:!size-[10%]" />
+        </div>
     </section>
   )
 }

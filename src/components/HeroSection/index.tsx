@@ -10,7 +10,6 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { useInView } from '@/hooks/useInView'
 import { RefObject, useEffect, useRef } from 'react'
 import { KnightRainBackground } from '../KnightRainBackground'
-import { LaurelWreath } from '../LaurelWreath'
 import RotatingText from '../ui/TextUI/RotatingText'
 import { Dock, DockIcon } from '../ui/dock'
 import {
@@ -31,6 +30,11 @@ const HOLD_SCREENS = 0.5
 export const HERO_PIN_SCREENS = ANIMATION_SCREENS + HOLD_SCREENS
 // Tamanho final do cavaleiro (1 = tamanho inicial)
 const KNIGHT_END_SCALE = 0.55
+// Desfoque (px) do nome enquanto ainda está atrás do cavaleiro; some conforme
+// ele sai de trás e fica nítido
+const TITLE_BLUR = 10
+// Fração da animação em que o nome termina de sair de trás do cavaleiro
+const TITLE_CLEAR_AT = 0.8
 // Quanto o cavaleiro desce (fração da altura da tela) enquanto encolhe
 const KNIGHT_END_DROP = 0.06
 
@@ -62,17 +66,23 @@ export function HeroSection({ containerRef }: HeroSectionProps) {
         y: () => window.innerHeight * 0.12,
       })
       gsap.set(content, { autoAlpha: 0 })
-      // O GSAP lê variáveis CSS sem valor inicial como 0, então o estado do
-      // cavaleiro é animado num objeto e copiado para as variáveis CSS
+      // O estado do cavaleiro vai para data-attributes, lidos pela cena a cada
+      // frame. Variáveis CSS no elemento raiz invalidariam o estilo de toda a
+      // subárvore a cada tick do scroll.
       const knight = { scale: 1, drop: 0 }
       const applyKnight = () => {
-        knightRoot.style.setProperty('--knight-scale', String(knight.scale))
-        knightRoot.style.setProperty(
-          '--knight-y',
-          `${knight.drop * window.innerHeight}px`
-        )
+        knightRoot.dataset.knightScale = String(knight.scale)
+        knightRoot.dataset.knightDrop = String(knight.drop * window.innerHeight)
       }
       applyKnight()
+      // Desfoque do nome via objeto auxiliar: 'none' quando nítido, para não
+      // manter o filtro (e a camada extra) ativo sem necessidade
+      const blur = { v: TITLE_BLUR }
+      const applyBlur = () => {
+        const v = Math.round(blur.v * 2) / 2
+        title.style.filter = v > 0 ? `blur(${v}px)` : 'none'
+      }
+      applyBlur()
 
       const tl = gsap.timeline({
         defaults: { ease: 'none' },
@@ -100,6 +110,16 @@ export function HeroSection({ containerRef }: HeroSectionProps) {
         0
       )
         .to(title, { autoAlpha: 1, duration: 0.2 }, 0)
+        .to(
+          blur,
+          {
+            v: 0,
+            duration: TITLE_CLEAR_AT,
+            ease: 'power1.in',
+            onUpdate: applyBlur,
+          },
+          0
+        )
         .to(title, { scale: 1, y: 0, duration: 0.85, ease: 'power2.out' }, 0)
         .to(content, { autoAlpha: 1, duration: 0.3 }, 0.7)
         // pausa: a timeline segue por mais um trecho sem nada animando
@@ -108,8 +128,9 @@ export function HeroSection({ containerRef }: HeroSectionProps) {
 
     return () => {
       ctx.revert()
-      knightRoot.style.removeProperty('--knight-scale')
-      knightRoot.style.removeProperty('--knight-y')
+      title.style.filter = ''
+      delete knightRoot.dataset.knightScale
+      delete knightRoot.dataset.knightDrop
     }
   }, [])
 
@@ -191,11 +212,6 @@ export function HeroSection({ containerRef }: HeroSectionProps) {
                 ))}
               </Dock>
             </TooltipProvider>
-          </div>
-
-          {/* // Cursos relevantes */}
-          <div className="flex items-center justify-center absolute right-0 left-0 -bottom-[40%] sm:-bottom-[50%]">
-            <LaurelWreath containerStyle="!size-[20%] sm:!size-[10%]" />
           </div>
         </motion.div>
       </div>
