@@ -2,7 +2,7 @@
 
 import { GithubLogoIcon } from '@phosphor-icons/react'
 import { AnimatePresence, motion } from 'framer-motion'
-import { ScrollSmoother } from 'gsap/ScrollSmoother'
+import { setPageScrollLocked } from '@/lib/scrollLock'
 import { useEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { IoClose } from 'react-icons/io5'
@@ -51,8 +51,7 @@ export function DashboardContent() {
     }
 
     videoRef.current?.pause()
-    const smoother = ScrollSmoother.get()
-    smoother?.paused(true)
+    setPageScrollLocked(true)
 
     const onKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape') setIsModalOpen(false)
@@ -60,7 +59,7 @@ export function DashboardContent() {
     window.addEventListener('keydown', onKeyDown)
 
     return () => {
-      smoother?.paused(false)
+      setPageScrollLocked(false)
       window.removeEventListener('keydown', onKeyDown)
     }
   }, [isModalOpen, hasEnteredView])

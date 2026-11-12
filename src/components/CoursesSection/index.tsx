@@ -1,7 +1,7 @@
 import { useGSAP } from '@gsap/react'
 import { EnvelopeIcon } from '@phosphor-icons/react'
 import gsap from 'gsap'
-import { ScrollSmoother } from 'gsap/ScrollSmoother'
+import { setPageScrollLocked } from '@/lib/scrollLock'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import {
   useCallback,
@@ -61,7 +61,7 @@ export function CoursesSection() {
     const height = card.offsetHeight
 
     isAnimatingRef.current = true
-    ScrollSmoother.get()?.paused(true)
+    setPageScrollLocked(true)
     // No desktop a carta já está virada pelo hover: a cópia começa igual a ela
     setShowContent(card.matches(':hover'))
     setSelected({
@@ -128,7 +128,7 @@ export function CoursesSection() {
         const original = cardRefs.current[selected.index]
         if (original) gsap.set(original, { autoAlpha: 1 })
         setSelected(null)
-        ScrollSmoother.get()?.paused(false)
+        setPageScrollLocked(false)
         isAnimatingRef.current = false
       },
     })

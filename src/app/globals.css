@@ -20,12 +20,15 @@ body {
   overscroll-behavior: none;
 }
 
-/* ScrollSmoother */
-#smooth-wrapper {
+/* ScrollSmoother — só quando ele está ativo (a classe é posta pelo
+   HomeContent). Em dispositivos de toque o scroll é nativo e o
+   will-change: transform do conteúdo viraria o bloco de contenção dos
+   elementos position: fixed, quebrando os pins do ScrollTrigger. */
+.has-smoother #smooth-wrapper {
   overflow: hidden;
 }
 
-#smooth-content {
+.has-smoother #smooth-content {
   overflow: visible;
   width: 100%;
   will-change: transform;

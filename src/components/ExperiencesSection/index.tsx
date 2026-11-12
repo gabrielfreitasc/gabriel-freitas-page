@@ -8,12 +8,9 @@ import { BlockRevealText } from '../ui/BlockRevealText'
 import { BEE_START_ID } from './BeeFlight'
 import { LaurelWreath } from '../LaurelWreath'
 
-// Placeholder com a mesma altura do ExperienceCard (aspect 714/800) para evitar layout shift
-const SlidePlaceholder = () => (
-  <div className="w-full flex items-center justify-center">
-    <div className="w-[900px] max-w-[95vw] aspect-[714/800]" />
-  </div>
-)
+// Enquanto o chunk de uma plataforma carrega, quem reserva o espaço é o
+// LazySlide (altura aproximada de cada slide); este fallback não ocupa nada
+const SlidePlaceholder = () => null
 
 // Carregadas sob demanda: recharts, moment e leaflet ficam fora do bundle inicial
 const ConsultancyPlataform = dynamic(
@@ -48,24 +45,56 @@ const FlyWireOnMinecraft = dynamic(
 // chega perto da tela. O FlyWire fica de fora: o BeeFlight mora nele e precisa
 // existir desde o título da seção.
 const slides = [
-  { id: 'consultancy', component: ConsultancyPlataform, lazy: true },
-  { id: 'geomap', component: GeoMapPlataform, lazy: true },
-  { id: 'trading', component: TradingPlataform, lazy: true },
-  { id: 'investor', component: InvestorPlataform, lazy: true },
+  {
+    id: 'consultancy',
+    component: ConsultancyPlataform,
+    lazy: true,
+    reserve: 'min-h-[1350px] md:min-h-[1320px] lg:min-h-[630px]',
+  },
+  {
+    id: 'geomap',
+    component: GeoMapPlataform,
+    lazy: true,
+    reserve: 'min-h-[1210px] md:min-h-[1090px] lg:min-h-[610px]',
+  },
+  {
+    id: 'trading',
+    component: TradingPlataform,
+    lazy: true,
+    reserve: 'min-h-[1720px] md:min-h-[1760px] lg:min-h-[750px]',
+  },
+  {
+    id: 'investor',
+    component: InvestorPlataform,
+    lazy: true,
+    reserve: 'min-h-[1300px] md:min-h-[1120px] lg:min-h-[590px]',
+  },
   {
     id: 'tradingString',
     component: TradingStringOperationalPlataform,
     lazy: true,
+    reserve: 'min-h-[1320px] md:min-h-[1110px] lg:min-h-[590px]',
   },
-  { id: 'flyWire', component: FlyWireOnMinecraft, lazy: false },
+  { id: 'flyWire', component: FlyWireOnMinecraft, lazy: false, reserve: '' },
 ]
 
 // Monta o conteúdo na primeira vez que o slide chega a 1,5 telas de distância
 // e o mantém montado depois. Montar tudo no carregamento custava JS (gráficos,
 // mapa, medições de layout) justo enquanto o usuário está no hero.
-function LazySlide({ children }: { children: ReactNode }) {
+// `reserve` guarda a altura aproximada do slide (por largura de tela) até o
+// conteúdo real existir: sem isso a página cresce milhares de pixels no meio
+// da rolagem, o que no celular dá saltos e refreshes do ScrollTrigger.
+function LazySlide({
+  children,
+  reserve,
+}: {
+  children: ReactNode
+  reserve: string
+}) {
   const ref = useRef<HTMLDivElement>(null)
+  const innerRef = useRef<HTMLDivElement>(null)
   const [show, setShow] = useState(false)
+  const [ready, setReady] = useState(false)
 
   useEffect(() => {
     const el = ref.current
@@ -82,9 +111,25 @@ function LazySlide({ children }: { children: ReactNode }) {
     return () => io.disconnect()
   }, [])
 
+  // Solta a altura reservada quando o conteúdo real aparece
+  useEffect(() => {
+    const inner = innerRef.current
+    if (!show || !inner) return
+    const ro = new ResizeObserver(() => {
+      if (inner.offsetHeight > 120) {
+        setReady(true)
+        ro.disconnect()
+      }
+    })
+    ro.observe(inner)
+    return () => ro.disconnect()
+  }, [show])
+
   return (
-    <div ref={ref} className="w-full h-full">
-      {show ? children : <SlidePlaceholder />}
+    <div ref={ref} className={`w-full h-full ${ready ? '' : reserve}`}>
+      <div ref={innerRef} className="w-full h-full">
+        {show ? children : null}
+      </div>
     </div>
   )
 }
@@ -99,15 +144,30 @@ export function ExperiencesSection() {
   useEffect(() => {
     const stack = stackRef.current
     if (!stack) return
-    let raf = 0
+    // Só refaz os cálculos depois que o scroll para: refresh no meio de um
+    // gesto de toque faz a página saltar
+    let timer: ReturnType<typeof setTimeout>
+    let lastScroll = 0
+    const onScroll = () => {
+      lastScroll = performance.now()
+    }
+    const tryRefresh = () => {
+      if (performance.now() - lastScroll < 250) {
+        timer = setTimeout(tryRefresh, 250)
+        return
+      }
+      ScrollTrigger.refresh()
+    }
     const ro = new ResizeObserver(() => {
-      cancelAnimationFrame(raf)
-      raf = requestAnimationFrame(() => ScrollTrigger.refresh())
+      clearTimeout(timer)
+      timer = setTimeout(tryRefresh, 250)
     })
     ro.observe(stack)
+    window.addEventListener('scroll', onScroll, { passive: true })
     return () => {
-      cancelAnimationFrame(raf)
+      clearTimeout(timer)
       ro.disconnect()
+      window.removeEventListener('scroll', onScroll)
     }
   }, [])
 
@@ -127,13 +187,13 @@ export function ExperiencesSection() {
         ref={stackRef}
         className="relative w-full min-h-screen flex flex-col gap-16 sm:gap-32"
       >
-        {slides.map(({ id, component: Component, lazy }) => (
+        {slides.map(({ id, component: Component, lazy, reserve }) => (
           <div
             key={id}
             className="w-full h-full relative odd:left-0 even:right-0 sm:odd:left-[-2.5%] sm:even:right-[-2.5%]"
           >
             {lazy ? (
-              <LazySlide>
+              <LazySlide reserve={reserve}>
                 <Component />
               </LazySlide>
             ) : (
@@ -157,9 +217,9 @@ export function ExperiencesSection() {
         por vipsz (CC BY 4.0)
       </p>
 
-        <div className="flex items-center justify-center absolute right-0 left-0 bottom-0">
-          <LaurelWreath containerStyle="!size-[20%] sm:!size-[10%]" />
-        </div>
+      <div className="flex items-center justify-center absolute right-0 left-0 bottom-0">
+        <LaurelWreath containerStyle="!size-[20%] sm:!size-[10%]" />
+      </div>
     </section>
   )
 }
