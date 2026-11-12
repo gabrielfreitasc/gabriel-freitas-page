@@ -102,7 +102,12 @@ export function KnightRainBackground({
     let lastW = scene.clientWidth
     let lastH = scene.clientHeight
     const ro = new ResizeObserver(() => {
-      if (scene.clientWidth === lastW && scene.clientHeight === lastH) return
+      const w = scene.clientWidth
+      const h = scene.clientHeight
+      if (w === lastW && h === lastH) return
+      // A barra de endereço do celular recolhendo muda só a altura (poucos
+      // %): recriar a cena por isso causaria um salto visível
+      if (w === lastW && Math.abs(h - lastH) < lastH * 0.25) return
       lastW = scene.clientWidth
       lastH = scene.clientHeight
       clearTimeout(rt)

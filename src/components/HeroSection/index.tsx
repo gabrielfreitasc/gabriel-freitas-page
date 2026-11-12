@@ -107,6 +107,11 @@ export function HeroSection({ containerRef }: HeroSectionProps) {
           // de scrub deixa o scroll com cara de lento
           scrub: true,
           anticipatePin: 1,
+          // O pin do hero é criado depois dos das seções de baixo (efeitos de
+          // layout rodam antes de efeitos normais). Sem prioridade, o refresh
+          // mede os cursos antes de contar o espaço do pin do hero e o pin
+          // deles começa 1,5 tela cedo demais.
+          refreshPriority: 1,
           invalidateOnRefresh: true,
         },
       })

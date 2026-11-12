@@ -41,9 +41,19 @@ export default function HomeContent() {
   // criado no useEffect do hero — um pin criado antes dele usaria
   // position: fixed, que quebra dentro do conteúdo transformado do smoother
   useLayoutEffect(() => {
+    // Em celulares/tablets (só toque) o ScrollSmoother não é criado: sem
+    // suavização ele só atrapalha — os pins viram transform (um frame de
+    // atraso em relação ao scroll nativo, daí os engasgos) e, pior, qualquer
+    // ScrollTrigger.refresh() com a página rolada mede todos os gatilhos
+    // deslocados pelo scroll atual, quebrando os pins (a seção de cursos
+    // não prendia mais e o fim da página ficava vazio). Com o scroll nativo
+    // os pins usam position: fixed e o ScrollTrigger mede certo.
+    if (ScrollTrigger.isTouch === 1) return
+
     const reduceMotion = window.matchMedia(
       '(prefers-reduced-motion: reduce)'
     ).matches
+    document.documentElement.classList.add('has-smoother')
     smootherRef.current = ScrollSmoother.create({
       smooth: reduceMotion ? 0 : 0.8,
       effects: !reduceMotion,
@@ -53,6 +63,7 @@ export default function HomeContent() {
 
     return () => {
       smootherRef.current?.kill()
+      document.documentElement.classList.remove('has-smoother')
     }
   }, [])
 
