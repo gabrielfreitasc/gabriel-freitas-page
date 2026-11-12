@@ -59,6 +59,18 @@ export function HeroSection({ containerRef }: HeroSectionProps) {
     if (!section || !title || !content || !knightRoot) return
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
 
+    // Um refresh do ScrollTrigger (altura do conteúdo abaixo mudando, como os
+    // slides carregados sob demanda) reverte a timeline por causa do
+    // invalidateOnRefresh. Se o scroll já estava no fim do pin ela não é
+    // renderizada de novo e o cavaleiro/nome voltavam ao estado inicial.
+    // Ao fim de cada refresh, reaplica o progresso real do scroll.
+    let tlRef: gsap.core.Timeline | null = null
+    const resync = () => {
+      const st = tlRef?.scrollTrigger
+      if (tlRef && st) tlRef.progress(0, true).progress(st.progress)
+    }
+    ScrollTrigger.addEventListener('refresh', resync)
+
     const ctx = gsap.context(() => {
       gsap.set(title, {
         scale: 0.3,
@@ -99,6 +111,7 @@ export function HeroSection({ containerRef }: HeroSectionProps) {
         },
       })
 
+      tlRef = tl
       tl.to(
         knight,
         {
@@ -127,6 +140,7 @@ export function HeroSection({ containerRef }: HeroSectionProps) {
     }, section)
 
     return () => {
+      ScrollTrigger.removeEventListener('refresh', resync)
       ctx.revert()
       title.style.filter = ''
       delete knightRoot.dataset.knightScale
