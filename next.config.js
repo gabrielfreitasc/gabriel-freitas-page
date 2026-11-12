@@ -1,14 +1,31 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
-  webpack(config) {
+  poweredByHeader: false,
+  experimental: {
+    // Importa só os ícones/funções usados em vez de carregar o barrel inteiro
+    optimizePackageImports: [
+      '@phosphor-icons/react',
+      'framer-motion',
+      'motion',
+    ],
+  },
+  webpack(config, { webpack }) {
     config.module.rules.push({
       test: /\.glsl$/,
       use: 'raw-loader',
     })
+    // moment inclui todos os locales (~300KB); o projeto só usa o padrão (en)
+    config.plugins.push(
+      new webpack.IgnorePlugin({
+        resourceRegExp: /^\.\/locale$/,
+        contextRegExp: /moment$/,
+      })
+    )
     return config
   },
   images: {
+    formats: ['image/avif', 'image/webp'],
     remotePatterns: [
       {
         protocol: 'https',

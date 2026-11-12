@@ -2,6 +2,7 @@
 
 import React, { useEffect, useRef } from 'react'
 import * as THREE from 'three'
+import { getPerfTier } from '@/lib/perf'
 import GradualBlurMemo from '../GradualBlur'
 
 export interface LiquidEtherProps {
@@ -150,11 +151,16 @@ export default function LiquidEther({
       clock: THREE.Clock | null = null
       init(container: HTMLElement) {
         this.container = container
-        this.pixelRatio = Math.min(window.devicePixelRatio || 1, 2)
+        // Simulação de fluido é suave por natureza: DPR alto só custa fill-rate
+        this.pixelRatio = Math.min(
+          window.devicePixelRatio || 1,
+          getPerfTier() === 'low' ? 1 : 1.5
+        )
         this.resize()
         this.renderer = new THREE.WebGLRenderer({
-          antialias: true,
+          antialias: false,
           alpha: true,
+          powerPreference: 'high-performance',
         })
         // Always transparent
         this.renderer.autoClear = false

@@ -17,6 +17,12 @@ export default function RootLayout({
   return (
     <html lang="pt-BR">
       <head>
+        <link rel="preconnect" href="https://api.fontshare.com" />
+        <link
+          rel="preconnect"
+          href="https://cdn.fontshare.com"
+          crossOrigin="anonymous"
+        />
         <link
           href="https://api.fontshare.com/v2/css?f[]=mona-sans@1&display=swap"
           rel="stylesheet"
