@@ -1,0 +1,127 @@
+.root {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  user-select: none;
+  background:
+    radial-gradient(
+      ellipse at 50% 50%,
+      rgba(120, 140, 170, 0.09) 0%,
+      rgba(0, 0, 0, 0) 55%
+    ),
+    linear-gradient(#07090d 0%, #0a0d12 60%, #06080a 100%);
+  -webkit-font-smoothing: antialiased;
+}
+
+.root pre {
+  position: absolute;
+  left: 0;
+  top: 0;
+  margin: 0;
+  font-family:
+    var(--knight-font), 'SFMono-Regular', Menlo, Consolas, 'Liberation Mono',
+    monospace;
+  font-weight: 700;
+  white-space: pre;
+  /* acima do conteúdo com z-10 do hero (o nome fica atrás do cavaleiro);
+     .root não define z-index, então não cria contexto de empilhamento */
+  z-index: 20;
+}
+
+/* chuva: três profundidades */
+.rain {
+  font-weight: 400 !important;
+}
+.root :global(.r1) {
+  color: rgba(170, 190, 225, 0.28);
+}
+.root :global(.r2) {
+  color: rgba(195, 214, 245, 0.5);
+  text-shadow: 0 0 3px rgba(195, 214, 245, 0.25);
+}
+.root :global(.r3) {
+  color: rgba(225, 236, 255, 0.8);
+  text-shadow: 0 0 5px rgba(215, 230, 255, 0.45);
+}
+.root :global(.rs) {
+  color: rgba(230, 240, 255, 0.75);
+  text-shadow: 0 0 4px rgba(230, 240, 255, 0.5);
+}
+
+/* cavaleiro */
+.fig {
+  --g: 0;
+  color: #f2f4f7;
+  text-shadow:
+    0 0 2px rgba(255, 255, 255, calc(0.5 + 0.25 * var(--g))),
+    0 0 7px rgba(255, 255, 255, calc(0.22 + 0.18 * var(--g))),
+    0 0 18px rgba(255, 255, 255, calc(0.1 + 0.12 * var(--g)));
+}
+.fig span {
+  display: block;
+  will-change: transform;
+}
+
+/* grama: verde escuro, oliva e amarelo-oliva */
+.root :global(.g0) {
+  color: #2c4630;
+}
+.root :global(.g1) {
+  color: #43613d;
+}
+.root :global(.g2) {
+  color: #66703f;
+}
+.root :global(.g3) {
+  color: #96944f;
+}
+.root :global(.g4) {
+  color: #c2bb6a;
+  text-shadow: 0 0 4px rgba(194, 187, 106, 0.5);
+}
+.root :global(.gt) {
+  color: #4c7870;
+}
+
+/* cachecol vermelho */
+.scarf :global(.sr) {
+  display: block;
+}
+.scarf span {
+  text-shadow: 0 0 3px rgba(200, 20, 30, 0.35);
+}
+.root :global(.s1) {
+  color: #560a12;
+}
+.root :global(.s2) {
+  color: #780f17;
+}
+.root :global(.s3) {
+  color: #98141b;
+}
+.root :global(.s4) {
+  color: #b51b20;
+}
+.root .scarf :global(.s5) {
+  color: #d02a2b;
+  text-shadow: 0 0 5px rgba(230, 50, 50, 0.45);
+}
+
+.world {
+  position: absolute;
+  z-index: 20;
+  transform: translateY(var(--knight-y, 0px)) scale(var(--knight-scale, 1));
+  will-change: transform;
+}
+
+.halo {
+  position: absolute;
+  background: radial-gradient(
+    ellipse at 50% 50%,
+    rgba(255, 255, 255, 0.06) 0%,
+    rgba(255, 255, 255, 0) 65%
+  );
+  filter: blur(24px);
+  pointer-events: none;
+}
