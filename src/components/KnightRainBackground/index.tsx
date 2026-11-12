@@ -28,20 +28,29 @@ export function KnightRainBackground({
   const rootRef = useRef<HTMLDivElement>(null)
   const worldRef = useRef<HTMLDivElement>(null)
   const figRef = useRef<HTMLPreElement>(null)
-  const rainRef = useRef<HTMLPreElement>(null)
-  const grassRef = useRef<HTMLPreElement>(null)
-  const scarfRef = useRef<HTMLPreElement>(null)
+  const rainCanvasRef = useRef<HTMLCanvasElement>(null)
+  const scarfCanvasRef = useRef<HTMLCanvasElement>(null)
+  const grassCanvasRef = useRef<HTMLCanvasElement>(null)
   const haloRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     const scene = rootRef.current
     const world = worldRef.current
     const fig = figRef.current
-    const rain = rainRef.current
-    const grass = grassRef.current
-    const scarf = scarfRef.current
+    const rainCanvas = rainCanvasRef.current
+    const scarfCanvas = scarfCanvasRef.current
+    const grassCanvas = grassCanvasRef.current
     const halo = haloRef.current
-    if (!scene || !world || !fig || !rain || !grass || !scarf || !halo) return
+    if (
+      !scene ||
+      !world ||
+      !fig ||
+      !rainCanvas ||
+      !scarfCanvas ||
+      !grassCanvas ||
+      !halo
+    )
+      return
 
     let stop: (() => void) | null = null
     let visible = false
@@ -53,7 +62,7 @@ export function KnightRainBackground({
       stop = null
       if (disposed || !visible || !fontReady) return
       stop = startKnightRain(
-        { scene, world, fig, rain, grass, scarf, halo },
+        { scene, world, fig, halo, rainCanvas, scarfCanvas, grassCanvas },
         minScaleRef.current
       )
     }
@@ -119,15 +128,15 @@ export function KnightRainBackground({
       data-knight-root
       style={{ '--knight-font': mono.style.fontFamily } as CSSProperties}
     >
-      {/* Mundo: chuva, grama e cavaleiro no mesmo espaço, com zoom via
-          --knight-scale (animado pelo hero) a partir do centro da base. Assim
-          a chuva continua desviando da silhueta real do cavaleiro. */}
+      {/* Chuva em canvas, atrás do cavaleiro */}
+      <canvas ref={rainCanvasRef} className={styles.rainCanvas} />
+      {/* Mundo: cavaleiro (texto), cachecol e grama (canvas) no mesmo espaço,
+          com o zoom do scroll aplicado nele a partir do centro da base. */}
       <div ref={worldRef} className={styles.world}>
         <div ref={haloRef} className={styles.halo} />
-        <pre ref={rainRef} className={styles.rain} />
         <pre ref={figRef} className={styles.fig} />
-        <pre ref={scarfRef} className={styles.scarf} />
-        <pre ref={grassRef} />
+        <canvas ref={scarfCanvasRef} className={styles.worldCanvas} />
+        <canvas ref={grassCanvasRef} className={styles.worldCanvas} />
       </div>
     </div>
   )

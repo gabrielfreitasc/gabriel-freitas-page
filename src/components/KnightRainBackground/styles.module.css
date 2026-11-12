@@ -14,6 +14,7 @@
   -webkit-font-smoothing: antialiased;
 }
 
+/* cavaleiro: único texto DOM da cena (estático, só as linhas se movem) */
 .root pre {
   position: absolute;
   left: 0;
@@ -29,27 +30,6 @@
   z-index: 20;
 }
 
-/* chuva: três profundidades */
-.rain {
-  font-weight: 400 !important;
-}
-.root :global(.r1) {
-  color: rgba(170, 190, 225, 0.28);
-}
-.root :global(.r2) {
-  color: rgba(195, 214, 245, 0.5);
-  text-shadow: 0 0 3px rgba(195, 214, 245, 0.25);
-}
-.root :global(.r3) {
-  color: rgba(225, 236, 255, 0.8);
-  text-shadow: 0 0 5px rgba(215, 230, 255, 0.45);
-}
-.root :global(.rs) {
-  color: rgba(230, 240, 255, 0.75);
-  text-shadow: 0 0 4px rgba(230, 240, 255, 0.5);
-}
-
-/* cavaleiro */
 .fig {
   --g: 0;
   color: #f2f4f7;
@@ -63,56 +43,27 @@
   will-change: transform;
 }
 
-/* grama: verde escuro, oliva e amarelo-oliva */
-.root :global(.g0) {
-  color: #2c4630;
-}
-.root :global(.g1) {
-  color: #43613d;
-}
-.root :global(.g2) {
-  color: #66703f;
-}
-.root :global(.g3) {
-  color: #96944f;
-}
-.root :global(.g4) {
-  color: #c2bb6a;
-  text-shadow: 0 0 4px rgba(194, 187, 106, 0.5);
-}
-.root :global(.gt) {
-  color: #4c7870;
+/* chuva: canvas da tela inteira, atrás do cavaleiro */
+.rainCanvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 20;
 }
 
-/* cachecol vermelho */
-.scarf :global(.sr) {
-  display: block;
-}
-.scarf span {
-  text-shadow: 0 0 3px rgba(200, 20, 30, 0.35);
-}
-.root :global(.s1) {
-  color: #560a12;
-}
-.root :global(.s2) {
-  color: #780f17;
-}
-.root :global(.s3) {
-  color: #98141b;
-}
-.root :global(.s4) {
-  color: #b51b20;
-}
-.root .scarf :global(.s5) {
-  color: #d02a2b;
-  text-shadow: 0 0 5px rgba(230, 50, 50, 0.45);
-}
-
+/* Mundo: cavaleiro, cachecol e grama. O hero escala esse bloco no scroll
+   (transform escrito direto pela cena, sem variáveis CSS herdadas). */
 .world {
   position: absolute;
   z-index: 20;
-  transform: translateY(var(--knight-y, 0px)) scale(var(--knight-scale, 1));
   will-change: transform;
+}
+
+/* canvas do cachecol e da grama: posição e tamanho definidos pela cena */
+.worldCanvas {
+  position: absolute;
+  z-index: 20;
 }
 
 .halo {
@@ -122,6 +73,5 @@
     rgba(255, 255, 255, 0.06) 0%,
     rgba(255, 255, 255, 0) 65%
   );
-  filter: blur(24px);
   pointer-events: none;
 }
