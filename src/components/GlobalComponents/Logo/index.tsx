@@ -37,6 +37,7 @@ export function Logo({
         muted
         playsInline
         preload="auto"
+        className="mix-blend-screen"
       />
     </motion.div>
   )

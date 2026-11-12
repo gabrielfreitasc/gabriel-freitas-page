@@ -49,7 +49,7 @@ export default function Preloader() {
               playsInline
               preload="auto"
               onEnded={() => setIsLoading(false)}
-              className="w-[42vw] max-w-[288px] h-auto"
+              className="w-[42vw] max-w-[288px] h-auto mix-blend-screen"
             />
           </div>
         </motion.div>
